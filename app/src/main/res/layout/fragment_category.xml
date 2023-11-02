@@ -10,16 +10,32 @@
 
     <EditText
         android:id="@+id/searchField"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:textColor="@color/white"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:hint="Search"
+        app:layout_constraintEnd_toStartOf="@+id/addCategoryButton"
+        android:hint="Search / Add Category"
+        android:textColorHint="@color/white"
         android:padding="8dp"
         android:background="@drawable/round_blue_background"
         android:layout_margin="8dp"
         />
+
+    <Button
+        android:id="@+id/addCategoryButton"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/round_blue_background"
+        android:text="Add"
+        app:layout_constraintBottom_toBottomOf="@id/searchField"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/searchField"
+        app:layout_constraintTop_toTopOf="parent" />
+
 
     <ListView
         android:id="@+id/categoryListView"
@@ -30,4 +46,5 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

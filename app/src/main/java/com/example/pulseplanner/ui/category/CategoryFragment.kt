@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import android.widget.Button
 import android.widget.EditText
 import android.widget.ListView
 import android.widget.TextView
@@ -24,10 +25,6 @@ class CategoryFragment : Fragment() {
 
     private var _binding: FragmentCategoryBinding? = null
     private val binding get() = _binding!!
-    private val textUtils = TextUtils()
-
-
-
 
     @SuppressLint("SetTextI18n")
     override fun onCreateView(
@@ -36,12 +33,14 @@ class CategoryFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentCategoryBinding.inflate(inflater, container, false)
-        val root: View = binding.root
+        val categoryViewModel = ViewModelProvider(this).get(CategoryViewModel::class.java)
 
+        // get fields from the layout
+        val root: View = binding.root
         val listView = root.findViewById<ListView>(R.id.categoryListView)
         val searchField = root.findViewById<EditText>(R.id.searchField)
+        val addCategoryButton = root.findViewById<Button>(R.id.addCategoryButton)
 
-        val categoryViewModel = ViewModelProvider(this).get(CategoryViewModel::class.java)
 
         // auto update the UI when categoryList changes
         categoryViewModel.categoryList.observe(viewLifecycleOwner, Observer { newCategoryList ->
@@ -50,7 +49,10 @@ class CategoryFragment : Fragment() {
             adapter.updateCategoryList(newCategoryList)
         })
 
-
+        // show add dialog when add button is clicked
+        addCategoryButton.setOnClickListener {
+            showAddCategoryDialog(searchField.text.toString())
+        }
 
         // Add a TextWatcher to listen for text changes
         searchField.addTextChangedListener(object : TextWatcher {
@@ -65,7 +67,7 @@ class CategoryFragment : Fragment() {
                 // sort the category list based on the similarity of the category name to the search text
                 val categoryList = categoryViewModel.categoryList.value ?: emptyList()
                 val sortedList = categoryList.sortedByDescending { category ->
-                    textUtils.getSimilarity(category.categoryName.toString(), newText)
+                    TextUtils.getSimilarity(category.categoryName.toString(), newText)
                 }
 
                 categoryViewModel.updateCategoryList(sortedList)
@@ -76,7 +78,6 @@ class CategoryFragment : Fragment() {
             }
         })
 
-
         val categoryList = categoryViewModel.categoryList.value ?: emptyList()
         val adapter = CategoryAdapter(requireContext(), categoryList.toMutableList()) { category ->
             showDeleteConfirmationDialog(category)
@@ -84,6 +85,27 @@ class CategoryFragment : Fragment() {
         listView.adapter = adapter
 
         return root
+    }
+
+    private fun showAddCategoryDialog(categoryText: String) {
+        // display msg add + categoryText?
+        val builder = AlertDialog.Builder(requireContext())
+        builder.setTitle("Add Category")
+        builder.setMessage("Are you sure you want to add $categoryText?")
+
+        //Pressed confirm
+        builder.setPositiveButton("Add") { dialog, which ->
+            addCategory(categoryText)
+        }
+
+        builder.setNegativeButton("Cancel") { dialog, which -> /* nothing */}
+
+        builder.create().show()
+    }
+
+    private fun addCategory(categoryName: String) {
+        val categoryViewModel = ViewModelProvider(this).get(CategoryViewModel::class.java)
+        println("CategoryFragment: addCategory: " + categoryName)
     }
 
     //Show a confirmation delete
@@ -106,9 +128,7 @@ class CategoryFragment : Fragment() {
     }
 
     private fun deleteCategory(category: Category) {
-        println("CategoryFragment: deleteCategory: " + category.categoryName)
-        val categoryViewModel = ViewModelProvider(this).get(CategoryViewModel::class.java)
-        categoryViewModel.deleteCategory(category)
+        ViewModelProvider(this).get(CategoryViewModel::class.java).deleteCategory(category)
     }
 
 }
