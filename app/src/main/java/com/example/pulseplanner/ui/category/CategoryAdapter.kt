@@ -12,7 +12,7 @@ import com.example.pulseplanner.model.Category
 
 class CategoryAdapter(
     context: Context,
-    categoryList: List<Category>,
+    private var categoryList: MutableList<Category>,
     private val onDeleteClickListener: (Category) -> Unit
 ) : ArrayAdapter<Category>(context, R.layout.category_item, categoryList) {
 
@@ -31,5 +31,14 @@ class CategoryAdapter(
 
         return view
     }
+
+    // Update the category list when it changes.
+    fun updateCategoryList(newCategoryList: List<Category>) {
+        clear()
+        addAll(newCategoryList)
+        notifyDataSetChanged()
+    }
 }
+
+
 

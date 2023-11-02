@@ -25,4 +25,11 @@ class CategoryViewModel : ViewModel() {
     fun updateCategoryList(newCategoryList: List<Category>) {
         _categoryList.value = newCategoryList
     }
+
+    fun deleteCategory(category: Category) {
+        val currentList = _categoryList.value ?: emptyList()
+        val newList = currentList.toMutableList()
+        newList.remove(category)
+        _categoryList.value = newList
+    }
 }
