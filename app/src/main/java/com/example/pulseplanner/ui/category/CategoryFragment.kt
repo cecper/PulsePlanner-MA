@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.pulseplanner.R
 import com.example.pulseplanner.databinding.FragmentCategoryBinding
+import com.example.pulseplanner.model.Category
 
 class CategoryFragment : Fragment() {
 
@@ -35,7 +36,15 @@ class CategoryFragment : Fragment() {
         // You can set an adapter for the ListView to display the data.
         // Create an ArrayAdapter and set it for the ListView.
         val categoryList = categoryViewModel.categoryList.value ?: emptyList()
-        val adapter = CategoryAdapter(requireContext(), categoryList)
+        val adapter = CategoryAdapter(requireContext(), categoryList) { category ->
+            // Handle category deletion here, e.g., display a confirmation dialog.
+            // You can call a function to handle the deletion or use ViewModel.
+            showDeleteConfirmationDialog(category)
+
+            println("CategoryFragment: onDeleteClickListener")
+            println("category: $category")
+        }
+
         listView.adapter = adapter
 
 
@@ -44,6 +53,12 @@ class CategoryFragment : Fragment() {
 
         return root
     }
+
+    private fun showDeleteConfirmationDialog(category: Category) {
+        // Implement a dialog to confirm category deletion here.
+        // You can use AlertDialog or any other dialog approach.
+    }
+
 
     override fun onDestroyView() {
         super.onDestroyView()

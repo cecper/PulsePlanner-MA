@@ -5,20 +5,31 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import android.widget.Button
 import android.widget.TextView
+import com.example.pulseplanner.R
 import com.example.pulseplanner.model.Category
 
-class CategoryAdapter(context: Context, categoryList: List<Category>) :
-    ArrayAdapter<Category>(context, android.R.layout.simple_list_item_1, categoryList) {
+class CategoryAdapter(
+    context: Context,
+    categoryList: List<Category>,
+    private val onDeleteClickListener: (Category) -> Unit
+) : ArrayAdapter<Category>(context, R.layout.category_item, categoryList) {
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         val view = convertView ?: LayoutInflater.from(context)
-            .inflate(android.R.layout.simple_list_item_1, parent, false)
+            .inflate(R.layout.category_item, parent, false)
 
         val item = getItem(position)
-        val textView = view.findViewById<TextView>(android.R.id.text1)
-        textView.text = item?.categoryName // Display only the categoryName
+        val textView = view.findViewById<TextView>(R.id.categoryNameTextView)
+        val deleteButton = view.findViewById<Button>(R.id.deleteButton)
+
+        textView.text = item?.categoryName
+        deleteButton.setOnClickListener {
+            onDeleteClickListener(item!!)
+        }
 
         return view
     }
 }
+
