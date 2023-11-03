@@ -2,6 +2,7 @@ package com.example.pulseplanner.ui.category
 
 import android.annotation.SuppressLint
 import android.app.AlertDialog
+import android.content.Context
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -13,6 +14,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.ListView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -105,7 +107,12 @@ class CategoryFragment : Fragment() {
 
     private fun addCategory(categoryName: String) {
         val categoryViewModel = ViewModelProvider(this).get(CategoryViewModel::class.java)
-        println("CategoryFragment: addCategory: " + categoryName)
+        try {
+            categoryViewModel.addCategory(categoryName)
+        } catch (e: Exception) {
+            // Show an error message as a toast
+            Toast.makeText(requireContext(), e.message, Toast.LENGTH_SHORT).show()
+        }
     }
 
     //Show a confirmation delete

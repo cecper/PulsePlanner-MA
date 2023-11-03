@@ -9,9 +9,7 @@ class CategoryViewModel : ViewModel() {
     private val _categoryList = MutableLiveData<List<Category>>()
 
     init {
-        CategoryRepository.getInstance().getAllCategories().let {
-            _categoryList.value = it
-        }
+        refreshCategoryList()
     }
 
     val categoryList: MutableLiveData<List<Category>> = _categoryList
@@ -21,9 +19,21 @@ class CategoryViewModel : ViewModel() {
     }
 
     fun deleteCategory(category: Category) {
-        val currentList = _categoryList.value ?: emptyList()
-        val newList = currentList.toMutableList()
-        newList.remove(category)
-        _categoryList.value = newList
+        CategoryRepository.getInstance().deleteCategory(category.categoryName)
+        refreshCategoryList()
+    }
+
+    fun addCategory(categoryName: String) {
+        //check if category already exists
+        if (CategoryRepository.getInstance().getCategoryByName(categoryName) != null) {
+            throw Exception("Category already exists")
+        }
+
+        CategoryRepository.getInstance().createCategory(Category(categoryName))
+        refreshCategoryList()
+    }
+
+    fun refreshCategoryList() {
+        _categoryList.value = CategoryRepository.getInstance().getAllCategories()
     }
 }

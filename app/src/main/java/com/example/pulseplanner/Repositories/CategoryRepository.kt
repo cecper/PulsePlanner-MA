@@ -1,84 +1,101 @@
 package com.example.pulseplanner.model
 
-import android.os.Environment
+import android.content.Context
+import android.content.Context.MODE_PRIVATE
+import android.widget.Toast
 import com.google.gson.Gson
-import java.io.File
-import kotlin.io.path.Path
+import java.io.FileInputStream
+import java.io.FileNotFoundException
+import java.io.FileOutputStream
 
-class CategoryRepository private constructor(private val jsonFilePath: String) {
-    private val categories = mutableListOf<Category>()
-
-    init {
-        // Load existing categories from a JSON file if available
-        loadCategories()
-    }
+class CategoryRepository private constructor() {
+    private var context: Context? = null
 
     // Create a new category
     fun createCategory(category: Category) {
+        var categories = getCategories().toMutableList()
         categories.add(category)
-        saveCategories()
+        saveCategories(categories)
     }
 
     // Read all categories
     fun getAllCategories(): List<Category> {
-        return categories.toList()
+        return getCategories().toList()
     }
 
     // Read a single category by name
     fun getCategoryByName(categoryName: String): Category? {
-        return categories.find { it.categoryName == categoryName }
-    }
-
-    // Update a category by name
-    fun updateCategory(categoryName: String, updatedCategory: Category) {
-        val categoryIndex = categories.indexOfFirst { it.categoryName == categoryName }
-        if (categoryIndex != -1) {
-            categories[categoryIndex] = updatedCategory
-            saveCategories()
-        }
+        return getCategories().find { it.categoryName == categoryName }
     }
 
     // Delete a category by name
     fun deleteCategory(categoryName: String) {
+        var categories = getCategories().toMutableList()
         val category = categories.find { it.categoryName == categoryName }
         if (category != null) {
             categories.remove(category)
-            saveCategories()
+            saveCategories(categories)
         }
     }
 
     // Save categories to the JSON file
-    private fun saveCategories() {
+    private fun saveCategories(categories : List<Category>) {
         val json = Gson().toJson(categories)
-        File(jsonFilePath).writeText(json)
+        var fos: FileOutputStream? = null
+
+        println("Saving categories to JSON file: $json")
+
+        try {
+            fos = context?.openFileOutput("categories.json", MODE_PRIVATE)
+            fos?.write(json.toByteArray())
+        } catch (e: FileNotFoundException) {
+            context?.showToast("File not found: ${e.message}")
+            println("File not found: ${e.message}")
+        } finally {
+            fos?.close()
+        }
     }
 
-    // Load categories from the JSON file
-    private fun loadCategories() {
-        val json = File(jsonFilePath).readText()
-        categories.addAll(Gson().fromJson(json, Array<Category>::class.java).toList())
+    private fun getCategories(): List<Category> {
+        var fis: FileInputStream? = null
+
+        println("Loading categories from JSON file")
+
+        try {
+            fis = context?.openFileInput("categories.json")
+            val readBytes = fis?.readBytes()
+            println("File contents: $readBytes")
+            if (readBytes != null) {
+                val json = readBytes.toString(Charsets.UTF_8)
+                return Gson().fromJson(json, Array<Category>::class.java).toList()
+            }
+        } catch (e: FileNotFoundException) {
+            context?.showToast("File not found while loading categories: ${e.message}")
+            println("File not found while loading categories: ${e.message}")
+        } finally {
+            fis?.close()
+        }
+
+        return emptyList()
     }
 
     companion object {
         private var instance: CategoryRepository? = null
-        private val dirPath = Environment.getDataDirectory().absolutePath + File.separator + "pulseplanner"
-        private val jsonFilePath = dirPath + File.separator + "categories.json"
 
         fun getInstance(): CategoryRepository {
             if (instance == null) {
-
-                if (!File(dirPath).isDirectory)
-                    File(dirPath).mkdirs()
-
-                println("dir: $dirPath" )
-                println("file: $jsonFilePath")
-
-                if (!File(jsonFilePath).exists())
-                    File(jsonFilePath).createNewFile()
-
-                instance = CategoryRepository(jsonFilePath)
+                instance = CategoryRepository()
             }
             return instance!!
         }
+
+        fun setContext(context: Context) {
+            this.getInstance().context = context
+        }
+    }
+
+    // Function to show a toast message
+    fun Context.showToast(message: String) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
 }

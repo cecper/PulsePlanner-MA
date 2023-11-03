@@ -12,6 +12,8 @@ import androidx.navigation.ui.setupWithNavController
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.appcompat.app.AppCompatActivity
 import com.example.pulseplanner.databinding.ActivityMainBinding
+import com.example.pulseplanner.model.CategoryRepository
+import java.io.File
 
 class MainActivity : AppCompatActivity() {
 
@@ -20,6 +22,9 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        // setup the repositories
+        CategoryRepository.setContext(this)
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -30,6 +35,22 @@ class MainActivity : AppCompatActivity() {
 //            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
 //                .setAction("Action", null).show()
 //        }
+
+
+        // write a file to the app's data directory
+//        val stringToWrite = "Hello, world! (working)"
+//        val fos = openFileOutput("test.txt", MODE_PRIVATE)
+//        fos.write(stringToWrite.toByteArray())
+//        fos.close()
+//
+//        println("File written to: ${filesDir.absolutePath}")
+//
+//        // read a file from the app's data directory
+//        val fis = openFileInput("test.txt")
+//        val readBytes = fis.readBytes()
+//        fis.close()
+//
+//        println("File contents: ${readBytes.toString(Charsets.UTF_8)}")
 
         val drawerLayout: DrawerLayout = binding.drawerLayout
         val navView: NavigationView = binding.navView
