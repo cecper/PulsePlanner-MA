@@ -49,6 +49,10 @@ class ExerciseOverviewFragment : Fragment() {
             // Update the UI with the new data when exerciseList changes
             val adapter = listView.adapter as ExerciseOverviewAdapter
             println("Exercise list changed: $newExerciseList")
+            //print all exercises
+            for (exercise in newExerciseList) {
+                println("Exercise: ${exercise.name} ${exercise.description} ${exercise.categories}")
+            }
             adapter.updateExerciseList(newExerciseList)
         })
 
