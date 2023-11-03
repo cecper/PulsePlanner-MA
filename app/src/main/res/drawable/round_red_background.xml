@@ -1,0 +1,5 @@
+<!-- res/drawable/round_red_background.xml -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <solid android:color="#FF0000" /> <!-- Use your desired red color here -->
+    <corners android:radius="20dp" /> <!-- Adjust the radius as needed to control the roundness -->
+</shape>

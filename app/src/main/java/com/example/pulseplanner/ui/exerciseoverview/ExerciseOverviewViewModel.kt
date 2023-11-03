@@ -19,4 +19,9 @@ class ExerciseOverviewViewModel : ViewModel() {
     fun refreshExerciseList() {
         _categoryList.value = ExerciseRepository.getInstance().getExercises()
     }
+
+    fun deleteExercise(exercise: Exercise) {
+        ExerciseRepository.getInstance().deleteExercise(exercise.name)
+        refreshExerciseList()
+    }
 }

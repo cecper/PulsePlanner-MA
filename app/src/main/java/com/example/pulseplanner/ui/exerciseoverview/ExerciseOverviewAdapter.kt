@@ -7,7 +7,11 @@ import android.widget.TextView
 import com.example.pulseplanner.R
 import com.example.pulseplanner.model.Exercise
 
-class ExerciseOverviewAdapter(context: Context, exercises: List<Exercise>) : ArrayAdapter<Exercise>(context, 0, exercises) {
+class ExerciseOverviewAdapter(
+    context: Context,
+    exercises: List<Exercise>,
+    private val onClickShowDeleteDialog: (Exercise) -> Unit
+) : ArrayAdapter<Exercise>(context, 0, exercises) {
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         var listItemView = convertView
@@ -19,6 +23,11 @@ class ExerciseOverviewAdapter(context: Context, exercises: List<Exercise>) : Arr
 
         val exerciseNameTextView = listItemView?.findViewById<TextView>(R.id.exerciseNameTextView)
         exerciseNameTextView?.text = exercise?.name
+
+        val deleteButton = listItemView?.findViewById<TextView>(R.id.deleteButton)
+        deleteButton?.setOnClickListener {
+            onClickShowDeleteDialog(exercise!!)
+        }
 
         val exerciseDescriptionTextView = listItemView?.findViewById<TextView>(R.id.exerciseDescriptionTextView)
         exerciseDescriptionTextView?.text = exercise?.description

@@ -2,6 +2,7 @@ package com.example.pulseplanner.ui.exerciseoverview
 
 import ExerciseOverviewAdapter
 import android.annotation.SuppressLint
+import android.app.AlertDialog
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -10,11 +11,15 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.ListView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.pulseplanner.R
 import com.example.pulseplanner.databinding.FragmentExerciseOverviewBinding
+import com.example.pulseplanner.model.Category
+import com.example.pulseplanner.model.Exercise
+import com.example.pulseplanner.ui.category.CategoryAdapter
 import com.example.pulseplanner.util.TextUtils
 
 class ExerciseOverviewFragment : Fragment() {
@@ -40,19 +45,16 @@ class ExerciseOverviewFragment : Fragment() {
         val listView = root.findViewById<ListView>(R.id.exerciseOverview)
         val searchField = root.findViewById<EditText>(R.id.exerciseSearchField)
 
-        val adapter = ExerciseOverviewAdapter(requireContext(), exerciseOverviewViewModel.exerciseList.value!!)
+        val exerciseList = exerciseOverviewViewModel.exerciseList.value ?: emptyList()
+        val adapter = ExerciseOverviewAdapter(requireContext(), exerciseList) { exercise ->
+            showDeleteConfirmationDialog(exercise)
+        }
         listView.adapter = adapter
 
         exerciseOverviewViewModel.refreshExerciseList()
 
         exerciseOverviewViewModel.exerciseList.observe(viewLifecycleOwner, Observer { newExerciseList ->
             // Update the UI with the new data when exerciseList changes
-            val adapter = listView.adapter as ExerciseOverviewAdapter
-            println("Exercise list changed: $newExerciseList")
-            //print all exercises
-            for (exercise in newExerciseList) {
-                println("Exercise: ${exercise.name} ${exercise.description} ${exercise.categories}")
-            }
             adapter.updateExerciseList(newExerciseList)
         })
 
@@ -73,6 +75,29 @@ class ExerciseOverviewFragment : Fragment() {
         })
 
         return root
+    }
+
+    private fun showDeleteConfirmationDialog(exercise: Exercise) {
+        val builder = AlertDialog.Builder(requireContext())
+        builder.setTitle("Delete Exercise")
+        builder.setMessage("Are you sure you want to delete ${exercise.name}?")
+
+        //Pressed confirm
+        builder.setPositiveButton("Delete") { dialog, which ->
+            deleteExercise(exercise)
+        }
+
+        //Pressed cancel
+        builder.setNegativeButton("Cancel") { dialog, which ->
+            // Do nothing, cancel the deletion.
+        }
+
+        builder.create().show()
+    }
+
+    private fun deleteExercise(exercise: Exercise) {
+        val exerciseOverviewViewModel = ViewModelProvider(this).get(ExerciseOverviewViewModel::class.java)
+        exerciseOverviewViewModel.deleteExercise(exercise)
     }
 
     override fun onDestroyView() {

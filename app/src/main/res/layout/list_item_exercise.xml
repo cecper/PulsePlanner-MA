@@ -7,18 +7,35 @@
     android:padding="8dp"
     android:background="#6496D3">
 
-    <TextView
-        android:id="@+id/exerciseNameTextView"
-        android:layout_width="wrap_content"
+    <RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="22sp"
-        android:textStyle="bold"
-        android:textColor="#FFFFFF"
-        android:paddingBottom="2dp"
-        android:paddingRight="20dp"
-        android:paddingLeft="20dp"
-        android:background="@drawable/round_blue_background"
-        />
+        android:padding="8dp">
+
+
+        <TextView
+            android:id="@+id/exerciseNameTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:text="Exercise Name"
+            android:textSize="20sp"
+            android:gravity="center_vertical"
+            android:layout_alignParentStart="true"
+            android:background="@drawable/round_blue_background"
+            android:padding="12dp" />
+
+        <Button
+            android:id="@+id/deleteButton"
+            android:layout_width="75dp"
+            android:layout_height="48dp"
+            android:text="Delete"
+            android:layout_alignParentEnd="true"
+            android:background="@drawable/round_red_background"
+            android:padding="0dp"
+            />
+
+    </RelativeLayout>
 
     <TextView
         android:id="@+id/exerciseCategoriesTextView"

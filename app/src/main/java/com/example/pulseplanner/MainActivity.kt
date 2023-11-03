@@ -35,9 +35,9 @@ class MainActivity : AppCompatActivity() {
             var exercises = mutableListOf<Exercise>()
 
             val categories = listOf(
-                Category("Category 1"),
-                Category("Category 2"),
-                Category("Category 3")
+                Category("Beginner"),
+                Category("Forehand"),
+                Category("Backhand")
             )
 
             val descriptions = listOf(
@@ -46,15 +46,11 @@ class MainActivity : AppCompatActivity() {
                 "Description for Exercise 3",
                 "Description for Exercise 4",
                 "Description for Exercise 5",
-                "Description for Exercise 6",
-                "Description for Exercise 7",
-                "Description for Exercise 8",
-                "Description for Exercise 9",
-                "Description for Exercise 10"
+                "Description for Exercise 6"
             )
-            for (i in 0 until 10) {
-                val exerciseDescription = descriptions[i] + "abh ".repeat(100 * (i + 1))
-                exercises.add(Exercise("Exercise ${i + 1}", listOf(categories[i % 3]), exerciseDescription))
+            for (i in 0 until 6) {
+                val exerciseDescription = descriptions[i] + "ah ".repeat(50 * (i + 1))
+                exercises.add(Exercise("Exercise ${i + 1}", listOf(categories[i % 3], categories[i % 2]), exerciseDescription))
             }
 
             // save the exercises one by one
