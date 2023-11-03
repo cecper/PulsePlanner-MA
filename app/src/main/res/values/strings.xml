@@ -12,4 +12,5 @@
     <string name="menu_slideshow">Slideshow</string>
     <string name="menu_exercise">Exercise</string>
     <string name="menu_category">Category</string>
+    <string name="menu_exercise_overview">Exercise Overview</string>
 </resources>

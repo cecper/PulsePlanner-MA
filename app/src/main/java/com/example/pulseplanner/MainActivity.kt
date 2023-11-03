@@ -13,7 +13,9 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.appcompat.app.AppCompatActivity
 import com.example.pulseplanner.Repositories.ExerciseRepository
 import com.example.pulseplanner.databinding.ActivityMainBinding
+import com.example.pulseplanner.model.Category
 import com.example.pulseplanner.model.CategoryRepository
+import com.example.pulseplanner.model.Exercise
 import java.io.File
 
 class MainActivity : AppCompatActivity() {
@@ -28,31 +30,43 @@ class MainActivity : AppCompatActivity() {
         CategoryRepository.setContext(this)
         ExerciseRepository.setContext(this)
 
+        // create 10 in a list
+        if (ExerciseRepository.getInstance().getExercises().size == 0) {
+            var exercises = mutableListOf<Exercise>()
+
+            val categories = listOf(
+                Category("Category 1"),
+                Category("Category 2"),
+                Category("Category 3")
+            )
+
+            val descriptions = listOf(
+                "Description for Exercise 1",
+                "Description for Exercise 2",
+                "Description for Exercise 3",
+                "Description for Exercise 4",
+                "Description for Exercise 5",
+                "Description for Exercise 6",
+                "Description for Exercise 7",
+                "Description for Exercise 8",
+                "Description for Exercise 9",
+                "Description for Exercise 10"
+            )
+            for (i in 0 until 10) {
+                val exerciseDescription = descriptions[i] + "abh ".repeat(100 * (i + 1))
+                exercises.add(Exercise("Exercise ${i + 1}", listOf(categories[i % 3]), exerciseDescription))
+            }
+
+            // save the exercises one by one
+            for (exercise in exercises) {
+                ExerciseRepository.getInstance().createExercise(exercise)
+            }
+        }
+
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         setSupportActionBar(binding.appBarMain.toolbar)
-
-//        binding.appBarMain.fab.setOnClickListener { view ->
-//            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                .setAction("Action", null).show()
-//        }
-
-
-        // write a file to the app's data directory
-//        val stringToWrite = "Hello, world! (working)"
-//        val fos = openFileOutput("test.txt", MODE_PRIVATE)
-//        fos.write(stringToWrite.toByteArray())
-//        fos.close()
-//
-//        println("File written to: ${filesDir.absolutePath}")
-//
-//        // read a file from the app's data directory
-//        val fis = openFileInput("test.txt")
-//        val readBytes = fis.readBytes()
-//        fis.close()
-//
-//        println("File contents: ${readBytes.toString(Charsets.UTF_8)}")
 
         val drawerLayout: DrawerLayout = binding.drawerLayout
         val navView: NavigationView = binding.navView
@@ -61,7 +75,7 @@ class MainActivity : AppCompatActivity() {
         // menu should be considered as top level destinations.
         appBarConfiguration = AppBarConfiguration(
             setOf(
-                R.id.nav_home, R.id.nav_gallery, R.id.nav_slideshow, R.id.nav_exercise, R.id.nav_category,
+                R.id.nav_home, R.id.nav_gallery, R.id.nav_slideshow, R.id.nav_exercise, R.id.nav_category, R.id.nav_exercise_overview
             ), drawerLayout
         )
         setupActionBarWithNavController(navController, appBarConfiguration)

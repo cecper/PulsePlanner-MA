@@ -24,6 +24,12 @@
         tools:layout="@layout/fragment_slideshow" />
 
     <fragment
+        android:id="@+id/nav_exercise_overview"
+        android:name="com.example.pulseplanner.ui.exerciseoverview.ExerciseOverviewFragment"
+        android:label="@string/menu_exercise"
+        tools:layout="@layout/fragment_exercise_overview" />
+
+    <fragment
         android:id="@+id/nav_exercise"
         android:name="com.example.pulseplanner.ui.exercise.ExerciseFragment"
         android:label="@string/menu_exercise"
