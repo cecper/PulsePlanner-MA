@@ -34,6 +34,6 @@ class CategoryViewModel : ViewModel() {
     }
 
     fun refreshCategoryList() {
-        _categoryList.value = CategoryRepository.getInstance().getAllCategories()
+        _categoryList.value = CategoryRepository.getInstance().getCategories()
     }
 }

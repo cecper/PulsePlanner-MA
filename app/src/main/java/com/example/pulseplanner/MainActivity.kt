@@ -11,6 +11,7 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.appcompat.app.AppCompatActivity
+import com.example.pulseplanner.Repositories.ExerciseRepository
 import com.example.pulseplanner.databinding.ActivityMainBinding
 import com.example.pulseplanner.model.CategoryRepository
 import java.io.File
@@ -25,6 +26,7 @@ class MainActivity : AppCompatActivity() {
 
         // setup the repositories
         CategoryRepository.setContext(this)
+        ExerciseRepository.setContext(this)
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)

@@ -18,11 +18,6 @@ class CategoryRepository private constructor() {
         saveCategories(categories)
     }
 
-    // Read all categories
-    fun getAllCategories(): List<Category> {
-        return getCategories().toList()
-    }
-
     // Read a single category by name
     fun getCategoryByName(categoryName: String): Category? {
         return getCategories().find { it.categoryName == categoryName }
@@ -36,6 +31,30 @@ class CategoryRepository private constructor() {
             categories.remove(category)
             saveCategories(categories)
         }
+    }
+
+    // Read all categories from the JSON file
+    fun getCategories(): List<Category> {
+        var fis: FileInputStream? = null
+
+        println("Loading categories from JSON file")
+
+        try {
+            fis = context?.openFileInput("categories.json")
+            val readBytes = fis?.readBytes()
+            if (readBytes != null) {
+                val json = readBytes.toString(Charsets.UTF_8)
+                println("Loaded categories from JSON file: $json")
+                return Gson().fromJson(json, Array<Category>::class.java).toList()
+            }
+        } catch (e: FileNotFoundException) {
+            context?.showToast("File not found while loading categories: ${e.message}")
+            println("File not found while loading categories: ${e.message}")
+        } finally {
+            fis?.close()
+        }
+
+        return emptyList()
     }
 
     // Save categories to the JSON file
@@ -54,29 +73,6 @@ class CategoryRepository private constructor() {
         } finally {
             fos?.close()
         }
-    }
-
-    private fun getCategories(): List<Category> {
-        var fis: FileInputStream? = null
-
-        println("Loading categories from JSON file")
-
-        try {
-            fis = context?.openFileInput("categories.json")
-            val readBytes = fis?.readBytes()
-            println("File contents: $readBytes")
-            if (readBytes != null) {
-                val json = readBytes.toString(Charsets.UTF_8)
-                return Gson().fromJson(json, Array<Category>::class.java).toList()
-            }
-        } catch (e: FileNotFoundException) {
-            context?.showToast("File not found while loading categories: ${e.message}")
-            println("File not found while loading categories: ${e.message}")
-        } finally {
-            fis?.close()
-        }
-
-        return emptyList()
     }
 
     companion object {

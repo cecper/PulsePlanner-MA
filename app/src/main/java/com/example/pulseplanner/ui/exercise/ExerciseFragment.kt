@@ -28,11 +28,6 @@ class ExerciseFragment : Fragment() {
 
         println("ExerciseFragment: onCreateView")
 
-//        val textView: TextView = binding.exerciseText
-//
-//        exerciseViewModel.text.observe(viewLifecycleOwner) {
-//            textView.text = it
-//        }
         return root
     }
 
