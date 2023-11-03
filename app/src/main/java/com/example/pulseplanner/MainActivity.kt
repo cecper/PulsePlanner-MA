@@ -11,7 +11,10 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.appcompat.app.AppCompatActivity
+import com.example.pulseplanner.Repositories.ExerciseRepository
 import com.example.pulseplanner.databinding.ActivityMainBinding
+import com.example.pulseplanner.model.CategoryRepository
+import java.io.File
 
 class MainActivity : AppCompatActivity() {
 
@@ -21,15 +24,36 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        // setup the repositories
+        CategoryRepository.setContext(this)
+        ExerciseRepository.setContext(this)
+
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         setSupportActionBar(binding.appBarMain.toolbar)
 
-        binding.appBarMain.fab.setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show()
-        }
+//        binding.appBarMain.fab.setOnClickListener { view ->
+//            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+//                .setAction("Action", null).show()
+//        }
+
+
+        // write a file to the app's data directory
+//        val stringToWrite = "Hello, world! (working)"
+//        val fos = openFileOutput("test.txt", MODE_PRIVATE)
+//        fos.write(stringToWrite.toByteArray())
+//        fos.close()
+//
+//        println("File written to: ${filesDir.absolutePath}")
+//
+//        // read a file from the app's data directory
+//        val fis = openFileInput("test.txt")
+//        val readBytes = fis.readBytes()
+//        fis.close()
+//
+//        println("File contents: ${readBytes.toString(Charsets.UTF_8)}")
+
         val drawerLayout: DrawerLayout = binding.drawerLayout
         val navView: NavigationView = binding.navView
         val navController = findNavController(R.id.nav_host_fragment_content_main)
@@ -37,7 +61,7 @@ class MainActivity : AppCompatActivity() {
         // menu should be considered as top level destinations.
         appBarConfiguration = AppBarConfiguration(
             setOf(
-                R.id.nav_home, R.id.nav_gallery, R.id.nav_slideshow
+                R.id.nav_home, R.id.nav_gallery, R.id.nav_slideshow, R.id.nav_exercise, R.id.nav_category,
             ), drawerLayout
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
