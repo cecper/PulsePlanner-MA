@@ -1,5 +1,6 @@
 package com.example.pulseplanner.ui.gallery
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -17,6 +18,7 @@ class GalleryFragment : Fragment() {
     // onDestroyView.
     private val binding get() = _binding!!
 
+    @SuppressLint("SetTextI18n")
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -29,9 +31,14 @@ class GalleryFragment : Fragment() {
         val root: View = binding.root
 
         val textView: TextView = binding.textGallery
-        galleryViewModel.text.observe(viewLifecycleOwner) {
-            textView.text = it
+        val testingText: TextView = binding.testingText
+        galleryViewModel.text.observe(viewLifecycleOwner) { text ->
+            textView.text = text
         }
+
+        testingText.text = "Text added"
+
+
         return root
     }
 
