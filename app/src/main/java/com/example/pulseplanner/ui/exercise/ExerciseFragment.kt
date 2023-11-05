@@ -140,6 +140,7 @@ class ExerciseFragment : Fragment() {
         val exerciseViewModel = ViewModelProvider(this).get(ExerciseViewModel::class.java)
         try {
             exerciseViewModel.addExercise(exercise)
+            Toast.makeText(requireContext(), "Exercise added", Toast.LENGTH_SHORT).show()
         } catch (e: Exception) {
             Toast.makeText(requireContext(), e.message, Toast.LENGTH_SHORT).show()
         }
