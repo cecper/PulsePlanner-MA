@@ -18,6 +18,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.pulseplanner.databinding.FragmentExerciseBinding
 import com.example.pulseplanner.model.Category
+import com.example.pulseplanner.model.Exercise
 import com.example.pulseplanner.util.TextUtils
 
 
@@ -41,6 +42,11 @@ class ExerciseFragment : Fragment() {
         val addCategoryButton = root.findViewById<Button>(com.example.pulseplanner.R.id.addCategoryButton)
         val selectedCategories = root.findViewById<ListView>(com.example.pulseplanner.R.id.addedCategories)
 
+        val exerciseName= root.findViewById<EditText>(com.example.pulseplanner.R.id.exerciseNameEditText)
+        val exerciseDescription = root.findViewById<EditText>(com.example.pulseplanner.R.id.exerciseDescriptionEditText)
+        val createExercise = root.findViewById<Button>(com.example.pulseplanner.R.id.submitExerciseButton)
+
+
         // Initialize the adapter with empty data
         exerciseAdapter = ExerciseAdapter(requireContext(), mutableListOf(), mutableListOf()) { category ->
             selectCategory(category)
@@ -48,8 +54,8 @@ class ExerciseFragment : Fragment() {
 
         listView.adapter = exerciseAdapter
 
-        val selectedCategoriesAdapter = ExerciseAdapter(requireContext(), mutableListOf(), mutableListOf()) { category ->
-            // Handle item selection for the selectedCategories ListView if needed
+        val selectedCategoriesAdapter = ExerciseAdapter(requireContext(), mutableListOf(), mutableListOf(),true) { category ->
+            deselectCategory(category)
         }
 
         selectedCategories.adapter = selectedCategoriesAdapter
@@ -59,16 +65,20 @@ class ExerciseFragment : Fragment() {
             Observer { newCategoryList ->
                 // Update the UI with the new data for selectedCategories
                 selectedCategoriesAdapter.updateCategoryList(newCategoryList)
+                exerciseAdapter.updateCategoryList(exerciseViewModel.categoryList.value ?: emptyList(), newCategoryList)
             }
         )
 
         exerciseViewModel.categoryList.observe(viewLifecycleOwner, Observer { newCategoryList ->
-            // Update the UI with the new data for categoryListView
             exerciseAdapter.updateCategoryList(newCategoryList)
         })
 
         addCategoryButton.setOnClickListener {
             showAddCategoryDialog(searchField.text.toString())
+        }
+
+        createExercise.setOnClickListener{
+            addExercise(Exercise(exerciseName.text.toString(), exerciseViewModel.selectedCategoriesList.value ?: emptyList(), exerciseDescription.text.toString()))
         }
 
         searchField.addTextChangedListener(object : TextWatcher {
@@ -81,9 +91,8 @@ class ExerciseFragment : Fragment() {
                 val sortedList = categoryList.sortedByDescending { category ->
                     TextUtils.getSimilarity(category.categoryName.toString(), newText)
                 }
-                exerciseViewModel.updateCategoryList(sortedList)
+                exerciseAdapter.updateCategoryList(sortedList, exerciseViewModel.selectedCategoriesList.value ?: emptyList())
             }
-
             override fun afterTextChanged(s: Editable?) {
             }
         })
@@ -118,9 +127,23 @@ class ExerciseFragment : Fragment() {
         // ViewModel logic for selecting categories
         ViewModelProvider(this)[ExerciseViewModel::class.java].addToSelectedCategories(category)
         val exerciseViewModel = ViewModelProvider(this).get(ExerciseViewModel::class.java)
-        // Notify the selectedCategoriesAdapter
         exerciseAdapter.updateSelectedCategoryList(exerciseViewModel.selectedCategoriesList.value ?: emptyList())
-
     }
+
+    private fun deselectCategory(category: Category) {
+        ViewModelProvider(this)[ExerciseViewModel::class.java].removeFromSelectedCategories(category)
+        val exerciseViewModel = ViewModelProvider(this).get(ExerciseViewModel::class.java)
+        exerciseAdapter.updateSelectedCategoryList(exerciseViewModel.selectedCategoriesList.value ?: emptyList())
+    }
+
+    private fun addExercise(exercise: Exercise) {
+        val exerciseViewModel = ViewModelProvider(this).get(ExerciseViewModel::class.java)
+        try {
+            exerciseViewModel.addExercise(exercise)
+        } catch (e: Exception) {
+            Toast.makeText(requireContext(), e.message, Toast.LENGTH_SHORT).show()
+        }
+    }
+
 
 }

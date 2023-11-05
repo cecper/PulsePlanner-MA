@@ -9,7 +9,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Exercise Name"
-        android:layout_below="@id/exerciseDescriptionEditText"
         android:background="@drawable/rounded_edittext"
         android:padding="12dp"
         android:layout_marginTop="10dp"
@@ -24,6 +23,7 @@
         android:background="@drawable/rounded_edittext"
         android:padding="12dp"
         android:layout_marginTop="10dp"
+        android:layout_below="@+id/exerciseNameEditText"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp" />
 
@@ -32,9 +32,9 @@
     <ListView
         android:id="@+id/addedCategories"
         android:layout_width="match_parent"
-        android:layout_height="250dp"
-        android:layout_below="@id/exerciseNameEditText"
+        android:layout_below="@id/exerciseDescriptionEditText"
         android:layout_marginLeft="10dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:layout_marginRight="10dp"
         android:layout_marginBottom="10dp" />
@@ -69,7 +69,7 @@
     <ListView
         android:id="@+id/categoryListView"
         android:layout_width="420dp"
-        android:layout_height="150dp"
+        android:layout_height="wrap_content"
         android:layout_below="@id/addCategoryButton"
         android:layout_marginTop="10dp"
         android:layout_marginLeft="10dp"

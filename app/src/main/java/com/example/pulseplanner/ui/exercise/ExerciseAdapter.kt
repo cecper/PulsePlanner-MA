@@ -15,6 +15,7 @@ class ExerciseAdapter(
     private val context: Context,
     private var categoryList: MutableList<Category>,
     private var selectedCategoryList: MutableList<Category>,
+    private val selected: Boolean = false,
     private val onAddToSelectedClickListener: (Category) -> Unit
 ) : BaseAdapter() {
 
@@ -50,26 +51,28 @@ class ExerciseAdapter(
             updateSelectedCategoryList(selectedCategoryList)
         }
 
+        if (selected) {
+            addToSelectedButton.text = "Remove"
+            addToSelectedButton.setBackgroundColor(context.getColor(R.color.red))
+            textView.setBackgroundColor(context.getColor(R.color.red))
+        }
 
         return view
     }
 
     // Update the categoryList when it changes
-    fun updateCategoryList(newCategoryList: List<Category>) {
+    fun updateCategoryList(newCategoryList: List<Category>, selectedCategoryList: List<Category> = emptyList()) {
         categoryList.clear()
-        categoryList.addAll(newCategoryList)
+        categoryList.addAll(newCategoryList.filter { !selectedCategoryList.contains(it) })
         notifyDataSetChanged()
     }
+
 
     // Update the selectedCategoryList when it changes
     fun updateSelectedCategoryList(newSelectedCategoryList: List<Category>) {
         selectedCategoryList.clear()
         selectedCategoryList.addAll(newSelectedCategoryList)
         notifyDataSetChanged()
-    }
-
-    fun getSelectedCategoryList(): List<Category> {
-        return selectedCategoryList
     }
 }
 
