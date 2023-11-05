@@ -1,6 +1,6 @@
 package com.example.pulseplanner.model
 
-data class Exercise (
+open class Exercise (
     val name: String,
     val categories: List<Category>,
     val description: String
