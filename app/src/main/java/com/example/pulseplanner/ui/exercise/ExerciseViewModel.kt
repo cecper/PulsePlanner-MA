@@ -37,7 +37,6 @@ class ExerciseViewModel : ViewModel() {
         if (!currentSelectedCategories.contains(category)) {
             currentSelectedCategories.add(category)
             _selectedCategoriesList.value = currentSelectedCategories // Notify LiveData of the change
-            println(_selectedCategoriesList.value)
         }
     }
 

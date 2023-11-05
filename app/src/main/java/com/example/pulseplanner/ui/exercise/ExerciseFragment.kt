@@ -58,7 +58,7 @@ class ExerciseFragment : Fragment() {
             viewLifecycleOwner,
             Observer { newCategoryList ->
                 // Update the UI with the new data for selectedCategories
-                exerciseAdapter.updateSelectedCategoryList(newCategoryList)
+                selectedCategoriesAdapter.updateCategoryList(newCategoryList)
             }
         )
 
