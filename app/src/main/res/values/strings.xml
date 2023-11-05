@@ -13,4 +13,6 @@
     <string name="menu_exercise">Exercise</string>
     <string name="menu_category">Category</string>
     <string name="menu_exercise_overview">Exercise Overview</string>
+    <string name="menu_add_training">Add Training</string>
+
 </resources>

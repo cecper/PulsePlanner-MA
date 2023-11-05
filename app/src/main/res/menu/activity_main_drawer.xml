@@ -29,5 +29,10 @@
             android:icon="@drawable/ic_menu_exercise"
             android:title="@string/menu_exercise_overview" />
 
+        <item
+            android:id="@+id/nav_add_training"
+            android:icon="@drawable/ic_menu_exercise"
+            android:title="@string/menu_add_training" />
+
     </group>
 </menu>
