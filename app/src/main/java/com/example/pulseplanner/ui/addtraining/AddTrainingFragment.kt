@@ -2,6 +2,7 @@ package com.example.pulseplanner.ui.addtraining
 
 import android.annotation.SuppressLint
 import android.app.DatePickerDialog
+import android.app.TimePickerDialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -33,9 +34,28 @@ class AddTrainingFragment : Fragment() {
         val timeField = binding.root.findViewById<EditText>(R.id.timeField)
         val saveButton = binding.root.findViewById<Button>(R.id.saveButton)
 
+        // Set the date field to today's date
+        val today = Calendar.getInstance()
+        val year = today.get(Calendar.YEAR)
+        val month = today.get(Calendar.MONTH)
+        val day = today.get(Calendar.DAY_OF_MONTH)
+        val formattedDate = String.format("%04d-%02d-%02d", year, month + 1, day)
+        dateField.setText(formattedDate)
+
+        // Set the time field to the current time
+        val hour = today.get(Calendar.HOUR_OF_DAY)
+        val minute = today.get(Calendar.MINUTE)
+        val formattedTime = String.format("%02d:%02d", hour, minute)
+        timeField.setText(formattedTime)
+
         // Show a date picker when the date field is clicked
         dateField.setOnClickListener {
             showDatePicker(dateField)
+        }
+
+        // Show a time picker when the time field is clicked
+        timeField.setOnClickListener {
+            showTimePicker(timeField)
         }
 
         // get fields from the layout
@@ -58,6 +78,26 @@ class AddTrainingFragment : Fragment() {
         }, year, month, day)
 
         datePickerDialog.show()
+    }
+
+    private fun showTimePicker(timeField: EditText) {
+        val calendar = Calendar.getInstance()
+        val hour = calendar.get(Calendar.HOUR_OF_DAY)
+        val minute = calendar.get(Calendar.MINUTE)
+
+        val timePickerDialog = TimePickerDialog(
+            requireContext(),
+            { _, selectedHour, selectedMinute ->
+                // Handle the selected time here
+                val selectedTime = String.format("%02d:%02d", selectedHour, selectedMinute)
+                timeField.setText(selectedTime)
+            },
+            hour,
+            minute,
+            true // Set to true for 24-hour format or false for 12-hour format
+        )
+
+        timePickerDialog.show()
     }
 
 }
