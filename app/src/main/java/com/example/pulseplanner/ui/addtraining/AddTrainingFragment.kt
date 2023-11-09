@@ -34,6 +34,9 @@ class AddTrainingFragment : Fragment() {
         val timeField = binding.root.findViewById<EditText>(R.id.timeField)
         val saveButton = binding.root.findViewById<Button>(R.id.saveButton)
 
+        //dateField.visibility = View.GONE
+        //dateField.visibility = View.VISIBLE
+
         // Set the date field to today's date
         val today = Calendar.getInstance()
         val year = today.get(Calendar.YEAR)
