@@ -9,10 +9,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ListView
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.pulseplanner.R
 import com.example.pulseplanner.databinding.FragmentAddTrainingBinding
+import com.example.pulseplanner.model.Category
+import com.example.pulseplanner.model.TrainingExercise
 import java.util.Calendar
 
 class AddTrainingFragment : Fragment() {
@@ -29,10 +33,14 @@ class AddTrainingFragment : Fragment() {
         _binding = FragmentAddTrainingBinding.inflate(inflater, container, false)
         val addTrainingViewModel = ViewModelProvider(this).get(AddTrainingViewModel::class.java)
 
-        val nameField = binding.root.findViewById<EditText>(R.id.nameField)
-        val dateField = binding.root.findViewById<EditText>(R.id.dateField)
-        val timeField = binding.root.findViewById<EditText>(R.id.timeField)
-        val saveButton = binding.root.findViewById<Button>(R.id.saveButton)
+        // get fields from the layout
+        val root: View = binding.root
+
+        val nameField = root.findViewById<EditText>(R.id.nameField)
+        val dateField = root.findViewById<EditText>(R.id.dateField)
+        val timeField = root.findViewById<EditText>(R.id.timeField)
+        val trainingExerciseList = root.findViewById<ListView>(R.id.trainingExerciseList)
+        val saveButton = root.findViewById<Button>(R.id.saveButton)
 
         //dateField.visibility = View.GONE
         //dateField.visibility = View.VISIBLE
@@ -61,8 +69,27 @@ class AddTrainingFragment : Fragment() {
             showTimePicker(timeField)
         }
 
-        // get fields from the layout
-        val root: View = binding.root
+        // auto update the UI when trainingExerciseList changes
+        addTrainingViewModel.trainingExerciseList.observe(viewLifecycleOwner, Observer { newTrainingExerciseList ->
+            // Update the UI with the new data when trainingExerciseList changes
+            val adapter = trainingExerciseList.adapter as TrainingExerciseAdaptar
+            adapter.updateTrainingExerciseList(newTrainingExerciseList)
+        })
+
+        addTrainingViewModel.addTrainingExercise()
+        addTrainingViewModel.addTrainingExercise()
+        addTrainingViewModel.addTrainingExercise()
+        addTrainingViewModel.addTrainingExercise()
+
+        addTrainingViewModel.updateTrainingExercise(0, TrainingExercise("Warming up", listOf(Category("Warming up"), Category("Running")), "test description \n dsqfdqskfj\n", 1, 1))
+        addTrainingViewModel.updateTrainingExercise(1, TrainingExercise("Game 1", listOf(Category("FH"), Category("Backhand")), "test description \n dsqfdqskfj\n", 5, 3))
+
+        val exerciseList = addTrainingViewModel.trainingExerciseList.value ?: emptyList()
+        val adapter = TrainingExerciseAdaptar(requireContext(), exerciseList.toMutableList())
+        trainingExerciseList.adapter = adapter
+
+        addTrainingViewModel.addTrainingExercise()
+
 
         return root
     }

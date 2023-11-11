@@ -17,44 +17,12 @@ class TrainingExercise {
         this.durationSeconds = durationSeconds
     }
 
-    fun getName(): String {
-        return name
-    }
-
-    fun setName(name: String) {
-        this.name = name
-    }
-
-    fun getCategories(): List<Category> {
-        return categories
-    }
-
-    fun setCategories(categories: List<Category>) {
-        this.categories = categories
-    }
-
-    fun getDescription(): String {
-        return description
-    }
-
-    fun setDescription(description: String) {
-        this.description = description
-    }
-
-    fun getDurationMinutes(): Int {
-        return durationMinutes
-    }
-
-    fun setDurationMinutes(durationMinutes: Int) {
-        this.durationMinutes = durationMinutes
-    }
-
-    fun getDurationSeconds(): Int {
-        return durationSeconds
-    }
-
-    fun setDurationSeconds(durationSeconds: Int) {
-        this.durationSeconds = durationSeconds
+    fun categoryNames(): String {
+        var categoryNames = ""
+        for (category in categories) {
+            categoryNames += category.categoryName + ", "
+        }
+        return categoryNames
     }
 
     override fun toString(): String {

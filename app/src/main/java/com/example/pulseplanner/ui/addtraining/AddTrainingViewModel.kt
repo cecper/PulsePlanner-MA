@@ -25,12 +25,9 @@ class AddTrainingViewModel : ViewModel() {
         _trainingExerciseList.value = trainingExerciseList!!
     }
 
-    fun updateTrainingExercise(trainingExercise: TrainingExercise) {
+    fun updateTrainingExercise(index: Int, trainingExercise: TrainingExercise) {
         val trainingExerciseList = trainingExerciseList.value?.toMutableList()
-        val index = trainingExerciseList?.indexOf(trainingExercise)
-        if (index != null) {
-            trainingExerciseList[index] = trainingExercise
-        }
+        trainingExerciseList?.set(index, trainingExercise)
         _trainingExerciseList.value = trainingExerciseList!!
     }
 }
