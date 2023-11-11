@@ -38,23 +38,22 @@
         android:orientation="horizontal">
 
         <TextView
+            android:id="@+id/trainingExerciseDuration"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:clickable="true"
+            android:focusable="true"
             android:text="Duration: "
+            android:layout_margin="3dp"
             android:textStyle="italic"/>
 
-        <EditText
-            android:id="@+id/trainingExerciseDurationSeconds"
-            android:layout_width="50dp"
+        <Button
+            android:id="@+id/TrainingExerciseDeleteButton"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:inputType="number"
-            android:hint="Min"/>
+            android:text="Delete"
+            android:layout_margin="3dp"
+            />
 
-        <EditText
-            android:id="@+id/trainingExerciseDurationMinutes"
-            android:layout_width="50dp"
-            android:layout_height="wrap_content"
-            android:inputType="number"
-            android:hint="Sec"/>
     </LinearLayout>
 </LinearLayout>

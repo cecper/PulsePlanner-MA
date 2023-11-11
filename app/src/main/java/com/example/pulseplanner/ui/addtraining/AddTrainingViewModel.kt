@@ -25,9 +25,24 @@ class AddTrainingViewModel : ViewModel() {
         _trainingExerciseList.value = trainingExerciseList!!
     }
 
+    fun deleteTrainingExercise(trainingExercise: TrainingExercise) {
+        val trainingExerciseList = trainingExerciseList.value?.toMutableList()
+        trainingExerciseList?.remove(trainingExercise)
+        _trainingExerciseList.value = trainingExerciseList!!
+    }
+
     fun updateTrainingExercise(index: Int, trainingExercise: TrainingExercise) {
         val trainingExerciseList = trainingExerciseList.value?.toMutableList()
         trainingExerciseList?.set(index, trainingExercise)
+        _trainingExerciseList.value = trainingExerciseList!!
+    }
+
+    // update the training exercise with the new duration
+    fun updateTrainingExerciseDuration(trainingExercise: TrainingExercise, durationMinuts: Int) {
+        val trainingExerciseList = trainingExerciseList.value?.toMutableList()
+        val index = trainingExerciseList?.indexOf(trainingExercise)
+        trainingExercise.durationMinutes = durationMinuts
+        trainingExerciseList?.set(index!!, trainingExercise)
         _trainingExerciseList.value = trainingExerciseList!!
     }
 }

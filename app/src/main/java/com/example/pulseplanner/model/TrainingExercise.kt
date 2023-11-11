@@ -5,16 +5,14 @@ class TrainingExercise {
     var categories: List<Category> = emptyList()
     var description: String = ""
     var durationMinutes: Int = 0
-    var durationSeconds: Int = 0
 
     constructor() {}
 
-    constructor(name: String, categories: List<Category>, description: String, durationMinutes: Int, durationSeconds: Int) {
+    constructor(name: String, categories: List<Category>, description: String, durationMinutes: Int) {
         this.name = name
         this.categories = categories
         this.description = description
         this.durationMinutes = durationMinutes
-        this.durationSeconds = durationSeconds
     }
 
     fun categoryNames(): String {
@@ -26,6 +24,6 @@ class TrainingExercise {
     }
 
     override fun toString(): String {
-        return "TrainingExercise(name='$name', categories=$categories, description='$description', durationMinutes=$durationMinutes, durationSeconds=$durationSeconds)"
+        return "TrainingExercise(name='$name', categories=$categories, description='$description', durationMinutes=$durationMinutes"
     }
 }
