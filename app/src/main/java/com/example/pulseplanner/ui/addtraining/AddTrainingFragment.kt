@@ -168,9 +168,6 @@ class AddTrainingFragment : Fragment() {
 
 
 
-
-
-
         return root
     }
 
