@@ -5,7 +5,10 @@ import android.app.AlertDialog
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.os.Bundle
+import android.text.Editable
 import android.text.InputType
+import android.text.TextUtils
+import android.text.TextWatcher
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -20,7 +23,6 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.pulseplanner.R
 import com.example.pulseplanner.databinding.FragmentAddTrainingBinding
-import com.example.pulseplanner.model.Category
 import com.example.pulseplanner.model.TrainingExercise
 import java.util.Calendar
 
@@ -28,6 +30,7 @@ class AddTrainingFragment : Fragment() {
 
     private var _binding: FragmentAddTrainingBinding? = null
     private val binding get() = _binding!!
+    private var selectingExercise: TrainingExercise? = null
 
     @SuppressLint("SetTextI18n")
     override fun onCreateView(
@@ -48,23 +51,20 @@ class AddTrainingFragment : Fragment() {
         val saveButton = root.findViewById<Button>(R.id.saveButton)
         val addTrainingButton = root.findViewById<Button>(R.id.addTrainingButton)
 
+        // select training
+        val gobackButton = root.findViewById<Button>(R.id.goBackButton)
+        val exerciseTrainingSearch = root.findViewById<EditText>(R.id.exerciseTrainingSearchField)
+        val addExerciseOverview = root.findViewById<ListView>(R.id.addExerciseOverview)
 
-        //dateField.visibility = View.GONE
-        //dateField.visibility = View.VISIBLE
+        gobackButton.visibility = View.GONE
+        exerciseTrainingSearch.visibility = View.GONE
+        addExerciseOverview.visibility = View.GONE
 
-        // Set the date field to today's date
+
+        // Set the date & time field to now
         val today = Calendar.getInstance()
-        val year = today.get(Calendar.YEAR)
-        val month = today.get(Calendar.MONTH)
-        val day = today.get(Calendar.DAY_OF_MONTH)
-        val formattedDate = String.format("%04d-%02d-%02d", year, month + 1, day)
-        dateField.setText(formattedDate)
-
-        // Set the time field to the current time
-        val hour = today.get(Calendar.HOUR_OF_DAY)
-        val minute = today.get(Calendar.MINUTE)
-        val formattedTime = String.format("%02d:%02d", hour, minute)
-        timeField.setText(formattedTime)
+        dateField.setText(String.format("%04d-%02d-%02d", today.get(Calendar.YEAR), today.get(Calendar.MONTH) + 1, today.get(Calendar.DAY_OF_MONTH)))
+        timeField.setText(String.format("%02d:%02d", today.get(Calendar.HOUR_OF_DAY), today.get(Calendar.MINUTE)))
 
         // Show a date picker when the date field is clicked
         dateField.setOnClickListener {
@@ -83,12 +83,6 @@ class AddTrainingFragment : Fragment() {
             adapter.updateTrainingExerciseList(newTrainingExerciseList)
         })
 
-        addTrainingViewModel.addTrainingExercise()
-        addTrainingViewModel.addTrainingExercise()
-
-        addTrainingViewModel.updateTrainingExercise(0, TrainingExercise("Warming up", listOf(Category("Warming up"), Category("Running")), "test description \n dsqfdqskfj\n", 1))
-        addTrainingViewModel.updateTrainingExercise(1, TrainingExercise("Game 1", listOf(Category("FH"), Category("Backhand")), "test description \n dsqfdqskfj\n", 5))
-
         // set the adapter for the training exercise list
         val exerciseList = addTrainingViewModel.trainingExerciseList.value ?: emptyList()
         val adapter = TrainingExerciseAdaptar(requireContext(), exerciseList.toMutableList())
@@ -99,11 +93,81 @@ class AddTrainingFragment : Fragment() {
         adapter.setOnDurationClickListener { durationExercise ->
             showDurationInputDialog(durationExercise)
         }
+        adapter.setOnSelectExerciseClickListener { selectExercise ->
+            selectingExercise = selectExercise
+            println("Selecting exercise ${selectExercise.name}")
+            Toast.makeText(requireContext(), "Selecting exercise ${selectExercise.name}", Toast.LENGTH_SHORT).show()
+
+            nameField.visibility = View.GONE
+            dateField.visibility = View.GONE
+            timeField.visibility = View.GONE
+            trainingExerciseList.visibility = View.GONE
+            saveButton.visibility = View.GONE
+            addTrainingButton.visibility = View.GONE
+            gobackButton.visibility = View.VISIBLE
+            exerciseTrainingSearch.visibility = View.VISIBLE
+            addExerciseOverview.visibility = View.VISIBLE
+        }
 
         // Handle the click event for the "Add Training" button
         addTrainingButton.setOnClickListener {
             addTrainingViewModel.addTrainingExercise()
         }
+
+        // select training
+        gobackButton.setOnClickListener {
+            gobackButton.visibility = View.GONE
+            exerciseTrainingSearch.visibility = View.GONE
+            addExerciseOverview.visibility = View.GONE
+            addTrainingButton.visibility = View.VISIBLE
+            saveButton.visibility = View.VISIBLE
+            trainingExerciseList.visibility = View.VISIBLE
+            nameField.visibility = View.VISIBLE
+            dateField.visibility = View.VISIBLE
+            timeField.visibility = View.VISIBLE
+        }
+
+        val exerciseOverviewList = addTrainingViewModel.exerciseList.value ?: emptyList()
+        val adapterExercise = SelectExerciseAdapter(requireContext(), exerciseOverviewList.toMutableList())
+        addExerciseOverview.adapter = adapterExercise
+
+        addTrainingViewModel.refreshExerciseList()
+        addTrainingViewModel.exerciseList.observe(viewLifecycleOwner, Observer { newExerciseList ->
+            // Update the UI with the new data when exerciseList changes
+            adapterExercise.updateExerciseList(newExerciseList)
+        })
+
+        exerciseTrainingSearch.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+                // This method is called before the text is changed.
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                // This method is called when the text is changed.
+                val search = s.toString()
+
+                val exerciseList = addTrainingViewModel.exerciseList.value ?: emptyList()
+                val sortedList = exerciseList.sortedByDescending { exercise ->
+                    //give points
+                    var points = com.example.pulseplanner.util.TextUtils.getSimilarity(exercise.name.toString(), search) * 2
+
+                    for (category in exercise.categories) {
+                        points += com.example.pulseplanner.util.TextUtils.getSimilarity(category.categoryName.toString(), search)
+                    }
+
+                    points
+                }
+
+                addTrainingViewModel.updateExerciseList(sortedList)
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+                // This method is called after the text has been changed.
+            }
+        })
+
+
+
 
 
 
@@ -212,8 +276,5 @@ class AddTrainingFragment : Fragment() {
         // Show the dialog
         alertDialogBuilder.create().show()
     }
-
-
-
 
 }

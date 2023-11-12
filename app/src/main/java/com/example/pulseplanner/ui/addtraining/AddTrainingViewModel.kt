@@ -2,16 +2,29 @@ package com.example.pulseplanner.ui.addtraining
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.pulseplanner.Repositories.ExerciseRepository
+import com.example.pulseplanner.model.Exercise
 import com.example.pulseplanner.model.TrainingExercise
 
 class AddTrainingViewModel : ViewModel() {
 
     private val _trainingExerciseList = MutableLiveData<List<TrainingExercise>>();
+    private val _categoryList = MutableLiveData<List<Exercise>>()
 
     var trainingExerciseList: MutableLiveData<List<TrainingExercise>> = _trainingExerciseList
+    val exerciseList: MutableLiveData<List<Exercise>> = _categoryList
 
     init {
         trainingExerciseList.value = emptyList()
+        refreshExerciseList()
+    }
+
+    fun refreshExerciseList() {
+        _categoryList.value = ExerciseRepository.getInstance().getExercises()
+    }
+
+    fun updateExerciseList(newExerciseList: List<Exercise>) {
+        _categoryList.value = newExerciseList
     }
 
     fun updateTrainingExerciseList(newTrainingExerciseList: List<TrainingExercise>) {

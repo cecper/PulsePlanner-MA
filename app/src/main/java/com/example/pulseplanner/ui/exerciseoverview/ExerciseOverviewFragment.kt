@@ -37,15 +37,13 @@ class ExerciseOverviewFragment : Fragment() {
         _binding = FragmentExerciseOverviewBinding.inflate(inflater, container, false)
         val exerciseOverviewViewModel = ViewModelProvider(this).get(ExerciseOverviewViewModel::class.java)
 
-        println("ExerciseOverviewFragment.onCreateView")
-
         // get fields from the layout
         val root: View = binding.root
         val listView = root.findViewById<ListView>(R.id.exerciseOverview)
         val searchField = root.findViewById<EditText>(R.id.exerciseSearchField)
 
         val exerciseList = exerciseOverviewViewModel.exerciseList.value ?: emptyList()
-        val adapter = ExerciseOverviewAdapter(requireContext(), exerciseList) { exercise ->
+        val adapter = ExerciseOverviewAdapter(requireContext(), exerciseList.toMutableList()) { exercise ->
             showDeleteConfirmationDialog(exercise)
         }
         listView.adapter = adapter
@@ -61,20 +59,6 @@ class ExerciseOverviewFragment : Fragment() {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
                 // This method is called before the text is changed.
             }
-
-//            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-//                // This method is called as the text is being changed.
-//                val newText = s.toString()
-//
-//                // sort the category list based on the similarity of the category name to the search text
-//                val categoryList = categoryViewModel.categoryList.value ?: emptyList()
-//                val sortedList = categoryList.sortedByDescending { category ->
-//                    TextUtils.getSimilarity(category.categoryName.toString(), newText)
-//                }
-//
-//                categoryViewModel.updateCategoryList(sortedList)
-//            }
-
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 // This method is called when the text is changed.
@@ -93,10 +77,6 @@ class ExerciseOverviewFragment : Fragment() {
                 }
 
                 exerciseOverviewViewModel.updateExerciseList(sortedList)
-
-
-                //exerciseOverviewViewModel.refreshExerciseList()
-                //println("onTextChanged: $s")
             }
 
             override fun afterTextChanged(s: Editable?) {

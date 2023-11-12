@@ -17,6 +17,7 @@ class TrainingExerciseAdaptar (
 
     private var onDeleteClickListener: ((TrainingExercise) -> Unit)? = null
     private var onDurationClickLister: ((TrainingExercise) -> Unit)? = null
+    private var onSelectExerciseClickListener: ((TrainingExercise) -> Unit)? = null
 
     fun setOnDeleteClickListener(listener: (TrainingExercise) -> Unit) {
         onDeleteClickListener = listener
@@ -26,12 +27,16 @@ class TrainingExerciseAdaptar (
         onDurationClickLister = listener
     }
 
+    fun setOnSelectExerciseClickListener(listener: (TrainingExercise) -> Unit) {
+        onSelectExerciseClickListener = listener
+    }
+
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-        val view = convertView ?: LayoutInflater.from(context)
-            .inflate(R.layout.list_item_training_exercise, parent, false)
+        val view = convertView ?: LayoutInflater.from(context).inflate(R.layout.list_item_training_exercise, parent, false)
 
         val item = getItem(position)
         val name = view.findViewById<TextView>(R.id.trainingExerciseName)
+        val selectTraining = view.findViewById<Button>(R.id.TrainingExerciseSelectButton)
         val categories = view.findViewById<TextView>(R.id.trainingExerciseCategories)
         val description = view.findViewById<TextView>(R.id.trainingExerciseDescription)
         val duration = view.findViewById<TextView>(R.id.trainingExerciseDuration)
@@ -51,6 +56,10 @@ class TrainingExerciseAdaptar (
         deleteButton.setOnClickListener {
             val item = getItem(position)
             onDeleteClickListener?.invoke(item!!)
+        }
+
+        selectTraining.setOnClickListener {
+            onSelectExerciseClickListener?.invoke(item!!)
         }
 
         return view

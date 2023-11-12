@@ -30,34 +30,34 @@ class MainActivity : AppCompatActivity() {
         CategoryRepository.setContext(this)
         ExerciseRepository.setContext(this)
 
-        // create 10 in a list
-        if (ExerciseRepository.getInstance().getExercises().size == 0) {
-            var exercises = mutableListOf<Exercise>()
-
-            val categories = listOf(
-                Category("Beginner"),
-                Category("Forehand"),
-                Category("Backhand")
-            )
-
-            val descriptions = listOf(
-                "Description for Exercise 1",
-                "Description for Exercise 2",
-                "Description for Exercise 3",
-                "Description for Exercise 4",
-                "Description for Exercise 5",
-                "Description for Exercise 6"
-            )
-            for (i in 0 until 6) {
-                val exerciseDescription = descriptions[i] + "ah ".repeat(50 * (i + 1))
-                exercises.add(Exercise("Exercise ${i + 1}", listOf(categories[i % 3], categories[i % 2]), exerciseDescription))
-            }
-
-            // save the exercises one by one
-            for (exercise in exercises) {
-                ExerciseRepository.getInstance().createExercise(exercise)
-            }
-        }
+//        // create 10 in a list
+//        if (ExerciseRepository.getInstance().getExercises().size == 0) {
+//            var exercises = mutableListOf<Exercise>()
+//
+//            val categories = listOf(
+//                Category("Beginner"),
+//                Category("Forehand"),
+//                Category("Backhand")
+//            )
+//
+//            val descriptions = listOf(
+//                "Description for Exercise 1",
+//                "Description for Exercise 2",
+//                "Description for Exercise 3",
+//                "Description for Exercise 4",
+//                "Description for Exercise 5",
+//                "Description for Exercise 6"
+//            )
+//            for (i in 0 until 6) {
+//                val exerciseDescription = descriptions[i] + "ah ".repeat(50 * (i + 1))
+//                exercises.add(Exercise("Exercise ${i + 1}", listOf(categories[i % 3], categories[i % 2]), exerciseDescription))
+//            }
+//
+//            // save the exercises one by one
+//            for (exercise in exercises) {
+//                ExerciseRepository.getInstance().createExercise(exercise)
+//            }
+//        }
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
