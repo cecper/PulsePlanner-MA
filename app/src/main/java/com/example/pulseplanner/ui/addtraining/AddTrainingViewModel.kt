@@ -32,7 +32,7 @@ class AddTrainingViewModel : ViewModel() {
     }
 
     fun addTrainingExercise() {
-        val trainingExercise = TrainingExercise("Select Exercise", emptyList(), "to be selected ...", 5)
+        val trainingExercise = TrainingExercise("Select Exercise", emptyList(), "to be selected ...", 10)
         val trainingExerciseList = trainingExerciseList.value?.toMutableList()
         trainingExerciseList?.add(trainingExercise)
         _trainingExerciseList.value = trainingExerciseList!!
@@ -70,4 +70,10 @@ class AddTrainingViewModel : ViewModel() {
         trainingExerciseList?.set(index!!, trainingExercise)
         _trainingExerciseList.value = trainingExerciseList!!
     }
+
+    fun clearTrainingExerciseList() {
+        _trainingExerciseList.value = emptyList()
+    }
+
+
 }

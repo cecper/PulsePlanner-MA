@@ -12,6 +12,7 @@ import androidx.navigation.ui.setupWithNavController
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.appcompat.app.AppCompatActivity
 import com.example.pulseplanner.Repositories.ExerciseRepository
+import com.example.pulseplanner.Repositories.TrainingRepository
 import com.example.pulseplanner.databinding.ActivityMainBinding
 import com.example.pulseplanner.model.Category
 import com.example.pulseplanner.model.CategoryRepository
@@ -29,6 +30,7 @@ class MainActivity : AppCompatActivity() {
         // setup the repositories
         CategoryRepository.setContext(this)
         ExerciseRepository.setContext(this)
+        TrainingRepository.setContext(this)
 
 //        // create 10 in a list
 //        if (ExerciseRepository.getInstance().getExercises().size == 0) {

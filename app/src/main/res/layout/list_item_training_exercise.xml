@@ -29,7 +29,6 @@
             android:layout_height="wrap_content"
             android:text="Select exercise"
             android:textSize="13sp"/>
-
     </LinearLayout>
 
     <!-- Categories -->

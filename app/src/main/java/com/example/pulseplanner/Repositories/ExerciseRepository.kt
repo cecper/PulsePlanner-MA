@@ -48,7 +48,7 @@ class ExerciseRepository private constructor() {
                 return Gson().fromJson(json, Array<Exercise>::class.java).toList()
             }
         } catch (e: FileNotFoundException) {
-            context?.showToast("File not found while loading exercises: ${e.message}")
+            //context?.showToast("File not found while loading exercises: ${e.message}")
             println("File not found while loading exercises: ${e.message}")
         } finally {
             fis?.close()

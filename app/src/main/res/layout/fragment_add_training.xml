@@ -67,16 +67,30 @@
         app:layout_constraintTop_toBottomOf="@id/timeField"
         app:layout_constraintVertical_bias="1.0" />
 
-    <!-- Add this Button below the ListView -->
+    <TextView
+        android:id="@+id/durationText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Tot: 0h 0m"
+        android:layout_margin="15dp"
+        android:textColor="@color/black"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/addExerciseButton"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_chainStyle="packed"/>
+
+    <!-- Add this Button next to the TextView -->
     <Button
         android:id="@+id/addExerciseButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
         android:text="Add Exercise"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/durationText"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"/>
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_chainStyle="packed"/>
 
 
     <!-- select exercise -->

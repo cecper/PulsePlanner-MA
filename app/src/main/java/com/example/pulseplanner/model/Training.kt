@@ -13,4 +13,24 @@ class Training {
         this.dateTime = dateTime
         this.exercises = exercises
     }
+
+    fun getDurationMinutes(): Int {
+        var durationMinutes = 0
+        for (exercise in exercises) {
+            durationMinutes += exercise.durationMinutes
+        }
+        return durationMinutes
+    }
+
+    override fun toString(): String {
+
+        var str = "Training(name='$name', dateTime=$dateTime \nExercises:\n"
+
+        // format Name - Categories (join with spaces) - Description
+        for (exercise in exercises) {
+            str += "\t${exercise.name} - ${exercise.categories.joinToString(" ")} - ${exercise.description}\n"
+        }
+
+        return str
+    }
 }

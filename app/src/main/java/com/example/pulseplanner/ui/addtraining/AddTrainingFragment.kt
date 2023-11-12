@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
+import android.os.Build
 import android.os.Bundle
 import android.text.Editable
 import android.text.InputType
@@ -16,14 +17,20 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.ListView
+import android.widget.TextView
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.pulseplanner.R
+import com.example.pulseplanner.Repositories.TrainingRepository
 import com.example.pulseplanner.databinding.FragmentAddTrainingBinding
 import com.example.pulseplanner.model.Exercise
+import com.example.pulseplanner.model.Training
 import com.example.pulseplanner.model.TrainingExercise
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import java.util.Calendar
 
 class AddTrainingFragment : Fragment() {
@@ -32,6 +39,7 @@ class AddTrainingFragment : Fragment() {
     private val binding get() = _binding!!
     private var selectingExercise: TrainingExercise? = null
 
+    @RequiresApi(Build.VERSION_CODES.O)
     @SuppressLint("SetTextI18n")
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -50,6 +58,7 @@ class AddTrainingFragment : Fragment() {
         val trainingExerciseList = root.findViewById<ListView>(R.id.trainingExerciseList)
         val saveButton = root.findViewById<Button>(R.id.saveButton)
         val addExerciseButton = root.findViewById<Button>(R.id.addExerciseButton)
+        val durationText = root.findViewById<TextView>(R.id.durationText)
 
         // select training
         val gobackButton = root.findViewById<Button>(R.id.goBackButton)
@@ -61,10 +70,9 @@ class AddTrainingFragment : Fragment() {
         addExerciseOverview.visibility = View.GONE
 
 
-        // Set the date & time field to now
-        val today = Calendar.getInstance()
-        dateField.setText(String.format("%04d-%02d-%02d", today.get(Calendar.YEAR), today.get(Calendar.MONTH) + 1, today.get(Calendar.DAY_OF_MONTH)))
-        timeField.setText(String.format("%02d:%02d", today.get(Calendar.HOUR_OF_DAY), today.get(Calendar.MINUTE)))
+        // Set the date & time field to now & update the total duration
+        setDateTimeFieldsToNow()
+        updateTotalDuration()
 
         // Show a date picker when the date field is clicked
         dateField.setOnClickListener {
@@ -96,7 +104,6 @@ class AddTrainingFragment : Fragment() {
         adapter.setOnSelectExerciseClickListener { selectExercise ->
             selectingExercise = selectExercise
             println("Selecting exercise ${selectExercise.name}")
-            Toast.makeText(requireContext(), "Selecting exercise ${selectExercise.name}", Toast.LENGTH_SHORT).show()
 
             nameField.visibility = View.GONE
             dateField.visibility = View.GONE
@@ -104,6 +111,7 @@ class AddTrainingFragment : Fragment() {
             trainingExerciseList.visibility = View.GONE
             saveButton.visibility = View.GONE
             addExerciseButton.visibility = View.GONE
+            durationText.visibility = View.GONE
             gobackButton.visibility = View.VISIBLE
             exerciseTrainingSearch.visibility = View.VISIBLE
             addExerciseOverview.visibility = View.VISIBLE
@@ -112,6 +120,12 @@ class AddTrainingFragment : Fragment() {
         // Handle the click event for the "Add Training" button
         addExerciseButton.setOnClickListener {
             addTrainingViewModel.addTrainingExercise()
+            updateTotalDuration()
+        }
+
+        // handle the click event for the "Save" button
+        saveButton.setOnClickListener {
+            confirmCreateTraining()
         }
 
         // select training
@@ -125,6 +139,7 @@ class AddTrainingFragment : Fragment() {
             nameField.visibility = View.VISIBLE
             dateField.visibility = View.VISIBLE
             timeField.visibility = View.VISIBLE
+            durationText.visibility = View.VISIBLE
         }
 
         val exerciseOverviewList = addTrainingViewModel.exerciseList.value ?: emptyList()
@@ -173,6 +188,111 @@ class AddTrainingFragment : Fragment() {
         return root
     }
 
+    // confirm the creation of the training
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun confirmCreateTraining() {
+        val alertDialogBuilder = AlertDialog.Builder(requireContext())
+        alertDialogBuilder.setTitle("Confirm Creation")
+        alertDialogBuilder.setMessage("Are you sure you want to create the training?")
+
+        alertDialogBuilder.setPositiveButton("Yes") { _, _ ->
+            createTraining()
+        }
+
+        alertDialogBuilder.setNegativeButton("No") { dialog, _ ->
+            dialog.dismiss()
+        }
+
+        alertDialogBuilder.create().show()
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun createTraining() {
+        val addTrainingViewModel = ViewModelProvider(this).get(AddTrainingViewModel::class.java)
+
+        // get fields from the layout
+        val root: View = binding.root
+
+        val nameField = root.findViewById<EditText>(R.id.nameField)
+        val dateField = root.findViewById<EditText>(R.id.dateField)
+        val timeField = root.findViewById<EditText>(R.id.timeField)
+
+        val name = nameField.text.toString()
+        val date = dateField.text.toString()
+        val time = timeField.text.toString()
+        val trainingExerciseList = addTrainingViewModel.trainingExerciseList.value ?: emptyList()
+
+        if (name.isEmpty()) {
+            Toast.makeText(
+                requireContext(),
+                "Please enter a name for the training",
+                Toast.LENGTH_SHORT
+            ).show()
+            return
+        }
+
+        // date is in the format yyyy-MM-dd (sometimes yyyy-M-d) or yyyy/M/dd (sometimes yyyy/M/d) etc get the in of them all
+        // split the date string by - or / and get the first 3 elements
+        val dateParts = date.split(Regex("[/-]")).take(3)
+        if (dateParts.size != 3) {
+            Toast.makeText(requireContext(), "Please enter a valid date", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        // time is in the format HH:mm
+        val timeParts = time.split(":").take(2)
+        if (timeParts.size != 2) {
+            Toast.makeText(requireContext(), "Please enter a valid time", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        // check if each training exercise has a name (at least one character)
+        for (trainingExercise in trainingExerciseList) {
+            if (trainingExercise.name == "Select Exercise") {
+                Toast.makeText(requireContext(), "Please select an exercise for each training exercise", Toast.LENGTH_SHORT).show()
+                return
+            }
+        }
+
+        val dateTime = LocalDateTime.of(dateParts[0].toInt(), dateParts[1].toInt(), dateParts[2].toInt(), timeParts[0].toInt(), timeParts[1].toInt())
+        val training = Training(name, dateTime, trainingExerciseList)
+
+        TrainingRepository.getInstance().createTraining(training)
+
+        // reset the fields
+        nameField.setText("")
+        setDateTimeFieldsToNow()
+        addTrainingViewModel.clearTrainingExerciseList()
+        updateTotalDuration()
+
+        // toast
+        Toast.makeText(
+            requireContext(),
+            "Training '$name' created",
+            Toast.LENGTH_SHORT
+        ).show()
+    }
+
+    private fun setDateTimeFieldsToNow() {
+        val today = Calendar.getInstance()
+        val dateField = binding.root.findViewById<EditText>(R.id.dateField)
+        val timeField = binding.root.findViewById<EditText>(R.id.timeField)
+        dateField.setText(String.format("%04d-%02d-%02d", today.get(Calendar.YEAR), today.get(Calendar.MONTH) + 1, today.get(Calendar.DAY_OF_MONTH)))
+        timeField.setText(String.format("%02d:%02d", today.get(Calendar.HOUR_OF_DAY), today.get(Calendar.MINUTE)))
+    }
+
+    private fun updateTotalDuration() {
+        val addTrainingViewModel = ViewModelProvider(this).get(AddTrainingViewModel::class.java)
+        val durationText = binding.root.findViewById<TextView>(R.id.durationText)
+
+        val trainingExerciseList = addTrainingViewModel.trainingExerciseList.value ?: emptyList()
+        var totalMinutes = 0
+        for (trainingExercise in trainingExerciseList) {
+            totalMinutes += trainingExercise.durationMinutes
+        }
+
+        durationText.text = String.format("Tot: %dh %dm", totalMinutes / 60, totalMinutes % 60)
+    }
 
     private fun selectExercise(exercise: Exercise) {
         val addTrainingViewModel = ViewModelProvider(this).get(AddTrainingViewModel::class.java)
@@ -189,6 +309,7 @@ class AddTrainingFragment : Fragment() {
         val trainingExerciseList = root.findViewById<ListView>(R.id.trainingExerciseList)
         val saveButton = root.findViewById<Button>(R.id.saveButton)
         val addTrainingButton = root.findViewById<Button>(R.id.addExerciseButton)
+        val durationText = root.findViewById<TextView>(R.id.durationText)
 
         // select training
         val gobackButton = root.findViewById<Button>(R.id.goBackButton)
@@ -205,6 +326,7 @@ class AddTrainingFragment : Fragment() {
         nameField.visibility = View.VISIBLE
         dateField.visibility = View.VISIBLE
         timeField.visibility = View.VISIBLE
+        durationText.visibility = View.VISIBLE
     }
 
     private fun showDatePicker(dateField: EditText) {
@@ -290,6 +412,7 @@ class AddTrainingFragment : Fragment() {
                 val addTrainingViewModel = ViewModelProvider(this).get(AddTrainingViewModel::class.java)
                 addTrainingViewModel.updateTrainingExerciseDuration(trainingExercise, newDuration)
                 // You can add further actions here if needed
+                updateTotalDuration()
             } else {
                 // Invalid input, show a message or take appropriate action
                 Toast.makeText(requireContext(), "Invalid input. Please enter a valid duration.", Toast.LENGTH_SHORT).show()
