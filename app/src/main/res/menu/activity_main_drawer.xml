@@ -29,5 +29,9 @@
             android:icon="@drawable/ic_menu_category"
             android:title="@string/menu_category" />
 
+        <item
+            android:id="@+id/nav_settings_menu"
+            android:icon="@drawable/ic_menu_category"
+            android:title="@string/menu_settings" />
     </group>
 </menu>

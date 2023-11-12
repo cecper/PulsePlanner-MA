@@ -47,4 +47,10 @@
         android:label="@string/menu_add_training"
         tools:layout="@layout/fragment_add_training" />
 
+    <fragment
+        android:id="@+id/nav_settings_menu"
+        android:name="com.example.pulseplanner.ui.settings.SettingsFragment"
+        android:label="@string/menu_settings"
+        tools:layout="@layout/settings_menu" />
+
 </navigation>
