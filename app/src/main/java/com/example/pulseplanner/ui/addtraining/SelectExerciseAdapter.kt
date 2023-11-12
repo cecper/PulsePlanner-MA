@@ -9,11 +9,18 @@ import android.widget.TextView
 import android.widget.Toast
 import com.example.pulseplanner.R
 import com.example.pulseplanner.model.Exercise
+import com.example.pulseplanner.model.TrainingExercise
 
 class SelectExerciseAdapter (
     context: Context,
     exercises: MutableList<Exercise>,
 ) : ArrayAdapter<Exercise>(context, 0, exercises) {
+
+    private var onSelectExerciseListener: ((Exercise) -> Unit)? = null
+
+    fun setOnSelectExerciseListener(listener: (Exercise) -> Unit) {
+        onSelectExerciseListener = listener
+    }
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         var listItemView = convertView
@@ -34,8 +41,8 @@ class SelectExerciseAdapter (
         val categoryNames = exercise?.categories?.map { it.categoryName }?.joinToString(", ")
         exerciseCategoriesTextView?.text = categoryNames
         selectButton?.setOnClickListener {
-            //toast("Exercise ${exercise?.name} selected")
             Toast.makeText(context, "Exercise ${exercise?.name} selected", Toast.LENGTH_SHORT).show()
+            onSelectExerciseListener?.invoke(exercise!!)
         }
 
         return listItemView!!

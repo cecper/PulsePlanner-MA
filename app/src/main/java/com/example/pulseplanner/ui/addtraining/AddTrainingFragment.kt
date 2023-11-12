@@ -7,7 +7,6 @@ import android.app.TimePickerDialog
 import android.os.Bundle
 import android.text.Editable
 import android.text.InputType
-import android.text.TextUtils
 import android.text.TextWatcher
 import android.view.Gravity
 import android.view.LayoutInflater
@@ -23,6 +22,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.pulseplanner.R
 import com.example.pulseplanner.databinding.FragmentAddTrainingBinding
+import com.example.pulseplanner.model.Exercise
 import com.example.pulseplanner.model.TrainingExercise
 import java.util.Calendar
 
@@ -49,7 +49,7 @@ class AddTrainingFragment : Fragment() {
         val timeField = root.findViewById<EditText>(R.id.timeField)
         val trainingExerciseList = root.findViewById<ListView>(R.id.trainingExerciseList)
         val saveButton = root.findViewById<Button>(R.id.saveButton)
-        val addTrainingButton = root.findViewById<Button>(R.id.addTrainingButton)
+        val addExerciseButton = root.findViewById<Button>(R.id.addExerciseButton)
 
         // select training
         val gobackButton = root.findViewById<Button>(R.id.goBackButton)
@@ -103,14 +103,14 @@ class AddTrainingFragment : Fragment() {
             timeField.visibility = View.GONE
             trainingExerciseList.visibility = View.GONE
             saveButton.visibility = View.GONE
-            addTrainingButton.visibility = View.GONE
+            addExerciseButton.visibility = View.GONE
             gobackButton.visibility = View.VISIBLE
             exerciseTrainingSearch.visibility = View.VISIBLE
             addExerciseOverview.visibility = View.VISIBLE
         }
 
         // Handle the click event for the "Add Training" button
-        addTrainingButton.setOnClickListener {
+        addExerciseButton.setOnClickListener {
             addTrainingViewModel.addTrainingExercise()
         }
 
@@ -119,7 +119,7 @@ class AddTrainingFragment : Fragment() {
             gobackButton.visibility = View.GONE
             exerciseTrainingSearch.visibility = View.GONE
             addExerciseOverview.visibility = View.GONE
-            addTrainingButton.visibility = View.VISIBLE
+            addExerciseButton.visibility = View.VISIBLE
             saveButton.visibility = View.VISIBLE
             trainingExerciseList.visibility = View.VISIBLE
             nameField.visibility = View.VISIBLE
@@ -129,7 +129,11 @@ class AddTrainingFragment : Fragment() {
 
         val exerciseOverviewList = addTrainingViewModel.exerciseList.value ?: emptyList()
         val adapterExercise = SelectExerciseAdapter(requireContext(), exerciseOverviewList.toMutableList())
+        adapterExercise.setOnSelectExerciseListener { selectExercise ->
+            selectExercise(selectExercise)
+        }
         addExerciseOverview.adapter = adapterExercise
+
 
         addTrainingViewModel.refreshExerciseList()
         addTrainingViewModel.exerciseList.observe(viewLifecycleOwner, Observer { newExerciseList ->
@@ -166,11 +170,42 @@ class AddTrainingFragment : Fragment() {
             }
         })
 
-
-
         return root
     }
 
+
+    private fun selectExercise(exercise: Exercise) {
+        val addTrainingViewModel = ViewModelProvider(this).get(AddTrainingViewModel::class.java)
+        if (selectingExercise != null) {
+            addTrainingViewModel.updateTrainingExercise(selectingExercise!!, exercise)
+        }
+
+        // get fields from the layout
+        val root: View = binding.root
+
+        val nameField = root.findViewById<EditText>(R.id.nameField)
+        val dateField = root.findViewById<EditText>(R.id.dateField)
+        val timeField = root.findViewById<EditText>(R.id.timeField)
+        val trainingExerciseList = root.findViewById<ListView>(R.id.trainingExerciseList)
+        val saveButton = root.findViewById<Button>(R.id.saveButton)
+        val addTrainingButton = root.findViewById<Button>(R.id.addExerciseButton)
+
+        // select training
+        val gobackButton = root.findViewById<Button>(R.id.goBackButton)
+        val exerciseTrainingSearch = root.findViewById<EditText>(R.id.exerciseTrainingSearchField)
+        val addExerciseOverview = root.findViewById<ListView>(R.id.addExerciseOverview)
+
+        gobackButton.visibility = View.GONE
+        exerciseTrainingSearch.visibility = View.GONE
+        addExerciseOverview.visibility = View.GONE
+
+        addTrainingButton.visibility = View.VISIBLE
+        saveButton.visibility = View.VISIBLE
+        trainingExerciseList.visibility = View.VISIBLE
+        nameField.visibility = View.VISIBLE
+        dateField.visibility = View.VISIBLE
+        timeField.visibility = View.VISIBLE
+    }
 
     private fun showDatePicker(dateField: EditText) {
         val calendar = Calendar.getInstance()

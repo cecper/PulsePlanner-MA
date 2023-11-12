@@ -60,7 +60,7 @@
         android:layout_height="0dp"
         android:layout_margin="5dp"
         android:layout_marginTop="10dp"
-        app:layout_constraintBottom_toTopOf="@id/addTrainingButton"
+        app:layout_constraintBottom_toTopOf="@id/addExerciseButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -69,11 +69,11 @@
 
     <!-- Add this Button below the ListView -->
     <Button
-        android:id="@+id/addTrainingButton"
+        android:id="@+id/addExerciseButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
-        android:text="Add Training"
+        android:text="Add Exercise"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"/>
