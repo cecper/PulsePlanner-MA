@@ -48,7 +48,7 @@ class CategoryRepository private constructor() {
                 return Gson().fromJson(json, Array<Category>::class.java).toList()
             }
         } catch (e: FileNotFoundException) {
-            context?.showToast("File not found while loading categories: ${e.message}")
+            //context?.showToast("File not found while loading categories: ${e.message}")
             println("File not found while loading categories: ${e.message}")
         } finally {
             fis?.close()
