@@ -2,7 +2,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="8dp">
+    android:layout_margin="8dp">
 
 
     <TextView
@@ -14,6 +14,7 @@
         android:layout_centerVertical="true"
         android:paddingStart="8dp"
         android:paddingEnd="8dp"
+        android:layout_marginLeft="25dp"
         android:background="@drawable/round_blue_background"
         />
 
@@ -23,6 +24,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_centerVertical="true"
+        android:layout_marginEnd="20dp"
         android:text="Add"
         android:backgroundTint="#5249C8"
         android:textColor="@android:color/white"

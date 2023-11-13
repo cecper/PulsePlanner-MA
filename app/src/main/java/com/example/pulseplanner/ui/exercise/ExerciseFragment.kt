@@ -138,9 +138,21 @@ class ExerciseFragment : Fragment() {
 
     private fun addExercise(exercise: Exercise) {
         val exerciseViewModel = ViewModelProvider(this).get(ExerciseViewModel::class.java)
+
+        // check name not empty
+        if (exercise.name.isEmpty()) {
+            Toast.makeText(requireContext(), "Exercise name cannot be empty", Toast.LENGTH_SHORT).show()
+            return
+        }
+
         try {
             exerciseViewModel.addExercise(exercise)
             Toast.makeText(requireContext(), "Exercise added", Toast.LENGTH_SHORT).show()
+
+            // reset fields
+            binding.exerciseNameEditText.setText("")
+            binding.exerciseDescriptionEditText.setText("")
+            exerciseViewModel.selectedCategoriesList.value = emptyList()
         } catch (e: Exception) {
             Toast.makeText(requireContext(), e.message, Toast.LENGTH_SHORT).show()
         }

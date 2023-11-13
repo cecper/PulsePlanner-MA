@@ -10,7 +10,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="5dp"
+        android:layout_marginBottom="5dp"
         android:orientation="horizontal">
 
         <TextView
@@ -23,7 +23,7 @@
             android:textColor="#2196F3"
             android:gravity="center_vertical"
             android:background="#BBDEFB"
-            android:padding="12dp" />
+            android:padding="8dp" />
 
         <Button
             android:id="@+id/viewButton"
@@ -38,7 +38,6 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginRight="5dp"
         android:orientation="horizontal">
 
         <TextView

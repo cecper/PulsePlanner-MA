@@ -15,9 +15,19 @@ import java.time.format.DateTimeFormatter
 
 class TrainingOverviewAdapter (
     context: Context,
-    trainings: MutableList<Training>,
-    private val onClickShowDeleteDialog: (Training) -> Unit
+    trainings: MutableList<Training>
 ) : ArrayAdapter<Training>(context, 0, trainings) {
+
+    private var onViewTrainingListener: ((Training) -> Unit)? = null
+    private var onDeletedTrainingListener: ((Training) -> Unit)? = null
+
+    fun setOnViewTrainingListener(listener: (Training) -> Unit) {
+        onViewTrainingListener = listener
+    }
+
+    fun setOnDeletedTrainingListener(listener: (Training) -> Unit) {
+        onDeletedTrainingListener = listener
+    }
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
@@ -50,13 +60,12 @@ class TrainingOverviewAdapter (
         //trainingDateTimeTextView?.text = formatDate(training?.dateTime!!)
 
 
-
-
-
-
-
         deleteButton?.setOnClickListener {
-            onClickShowDeleteDialog(training!!)
+            onDeletedTrainingListener?.invoke(training!!)
+        }
+
+        viewButton?.setOnClickListener {
+            onViewTrainingListener?.invoke(training!!)
         }
 
         return listItemView!!
