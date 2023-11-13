@@ -29,5 +29,11 @@
             android:icon="@drawable/ic_menu_category"
             android:title="@string/menu_category" />
 
+        <item
+            android:id="@+id/nav_training_overview"
+            android:icon="@drawable/ic_menu_category"
+            android:title="@string/menu_training_overview" />
+
+
     </group>
 </menu>

@@ -22,6 +22,18 @@ class Training {
         return durationMinutes
     }
 
+    fun getCategories(): List<Category> {
+        val categories = mutableListOf<Category>()
+        for (exercise in exercises) {
+            for (category in exercise.categories) {
+                if (!categories.contains(category)) {
+                    categories.add(category)
+                }
+            }
+        }
+        return categories
+    }
+
     override fun toString(): String {
 
         var str = "Training(name='$name', dateTime=$dateTime \nExercises:\n"

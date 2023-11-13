@@ -1,15 +1,32 @@
 package com.example.pulseplanner.Repositories
 
 import android.content.Context
+import android.os.Build
+import androidx.annotation.RequiresApi
 import com.example.pulseplanner.model.Training
-import com.google.gson.Gson
+import com.google.gson.GsonBuilder
+import com.google.gson.JsonDeserializationContext
+import com.google.gson.JsonDeserializer
+import com.google.gson.JsonElement
+import com.google.gson.JsonPrimitive
+import com.google.gson.JsonSerializationContext
+import com.google.gson.JsonSerializer
+import com.google.gson.reflect.TypeToken
 import java.io.FileInputStream
 import java.io.FileNotFoundException
+import java.lang.reflect.Type
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 class TrainingRepository private constructor() {
     private var context: Context? = null
+    @RequiresApi(Build.VERSION_CODES.O)
+    private val gson = GsonBuilder()
+        .registerTypeAdapter(LocalDateTime::class.java, LocalDateTimeAdapter())
+        .create()
 
     // Create a new training
+    @RequiresApi(Build.VERSION_CODES.O)
     fun createTraining(training: Training) {
         var trainings = getTrainings().toMutableList()
         trainings.add(training)
@@ -18,11 +35,13 @@ class TrainingRepository private constructor() {
     }
 
     // Read a single training by name
+    @RequiresApi(Build.VERSION_CODES.O)
     fun getTrainingByName(trainingName: String): Training? {
         return getTrainings().find { it.name == trainingName }
     }
 
     // Delete a training by name
+    @RequiresApi(Build.VERSION_CODES.O)
     fun deleteTraining(trainingName: String) {
         var trainings = getTrainings().toMutableList()
         val training = trainings.find { it.name == trainingName }
@@ -33,6 +52,7 @@ class TrainingRepository private constructor() {
     }
 
     // Read all trainings from the JSON file
+    @RequiresApi(Build.VERSION_CODES.O)
     fun getTrainings(): List<Training> {
         var fis: FileInputStream? = null
 
@@ -44,7 +64,9 @@ class TrainingRepository private constructor() {
             if (readBytes != null) {
                 val json = readBytes.toString(Charsets.UTF_8)
                 println("Loaded trainings from JSON file: $json")
-                return Gson().fromJson(json, Array<Training>::class.java).toList()
+
+                val typeToken = object : TypeToken<List<Training>>() {}.type
+                return gson.fromJson(json, typeToken)
             }
         } catch (e: FileNotFoundException) {
             //context?.showToast("File not found while loading trainings: ${e.message}")
@@ -57,8 +79,9 @@ class TrainingRepository private constructor() {
     }
 
     // Save trainings to the JSON file
+    @RequiresApi(Build.VERSION_CODES.O)
     fun saveTrainings(trainings: List<Training>) {
-        val json = Gson().toJson(trainings)
+        val json = gson.toJson(trainings)
         context?.openFileOutput("trainings.json", Context.MODE_PRIVATE).use {
             it?.write(json.toByteArray())
         }
@@ -86,5 +109,30 @@ class TrainingRepository private constructor() {
 
     fun Context.showToast(message: String) {
         android.widget.Toast.makeText(this, message, android.widget.Toast.LENGTH_SHORT).show()
+    }
+
+    // Custom Gson adapter for LocalDateTime
+    private class LocalDateTimeAdapter : JsonSerializer<LocalDateTime>,
+        JsonDeserializer<LocalDateTime> {
+        @RequiresApi(Build.VERSION_CODES.O)
+        private val formatter = DateTimeFormatter.ISO_LOCAL_DATE_TIME
+
+        @RequiresApi(Build.VERSION_CODES.O)
+        override fun serialize(
+            src: LocalDateTime?,
+            typeOfSrc: Type?,
+            context: JsonSerializationContext?
+        ): JsonElement {
+            return JsonPrimitive(formatter.format(src))
+        }
+
+        @RequiresApi(Build.VERSION_CODES.O)
+        override fun deserialize(
+            json: JsonElement?,
+            typeOfT: Type?,
+            context: JsonDeserializationContext?
+        ): LocalDateTime {
+            return LocalDateTime.parse(json!!.asString, formatter)
+        }
     }
 }
