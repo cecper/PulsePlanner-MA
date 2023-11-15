@@ -23,13 +23,4 @@
         android:layout_centerVertical="true"
         android:text="Dark Mode"/>
 
-    <!-- Add the FrameLayout for the fragment container -->
-    <FrameLayout
-        android:id="@+id/fragmentContainer"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@id/themeSwitch"
-        android:layout_marginTop="16dp">
-    </FrameLayout>
-
 </RelativeLayout>

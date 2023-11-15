@@ -51,6 +51,6 @@
         android:id="@+id/nav_settings_menu"
         android:name="com.example.pulseplanner.ui.settings.SettingsFragment"
         android:label="@string/menu_settings"
-        tools:layout="@layout/settings_menu" />
+        tools:layout="@layout/fragment_settings" />
 
 </navigation>
