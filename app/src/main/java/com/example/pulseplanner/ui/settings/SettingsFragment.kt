@@ -35,7 +35,6 @@ class SettingsFragment : Fragment() {
                 // Light mode
                 setTheme(AppCompatDelegate.MODE_NIGHT_NO)
             }
-            requireActivity().recreate()
         }
         return root
     }
