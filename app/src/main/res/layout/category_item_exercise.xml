@@ -10,7 +10,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="20sp"
-        android:textColor="@android:color/white"
         android:layout_centerVertical="true"
         android:paddingStart="8dp"
         android:paddingEnd="8dp"
@@ -24,8 +23,6 @@
         android:layout_marginStart="8dp"
         android:layout_centerVertical="true"
         android:text="Add"
-        android:backgroundTint="#5249C8"
-        android:textColor="@android:color/white"
         android:gravity="center"
         android:layout_alignParentEnd="true"
         />
