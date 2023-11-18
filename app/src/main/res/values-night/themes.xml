@@ -4,11 +4,11 @@
         <!-- Primary brand color. -->
         <item name="colorPrimary">#512DA8</item> <!-- Deep Purple -->
         <item name="colorPrimaryVariant">#311B92</item> <!-- Darker shade of Deep Purple -->
-        <item name="colorOnPrimary">#000000</item> <!-- Black text on Deep Purple -->
+        <item name="colorOnPrimary">#FFFFFF</item> <!-- White text on deep Orange -->
         <!-- Secondary brand color. -->
         <item name="colorSecondary">#009688</item> <!-- Teal -->
         <item name="colorSecondaryVariant">#00796B</item> <!-- Darker shade of Teal -->
-        <item name="colorOnSecondary">#000000</item> <!-- Black text on Teal -->
+        <item name="colorOnSecondary">#FFFFFF</item> <!-- Black text on Teal -->
         <!-- Status bar color. -->
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->

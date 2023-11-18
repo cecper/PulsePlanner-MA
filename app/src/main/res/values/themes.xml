@@ -5,7 +5,7 @@
         <!-- Primary brand color. -->
         <item name="colorPrimary">#FF5722</item> <!-- Deep Orange -->
         <item name="colorPrimaryVariant">#E64A19</item> <!-- Darker shade of Deep Orange -->
-        <item name="colorOnPrimary">#FFFFFF</item> <!-- White text on Deep Orange -->
+        <item name="colorOnPrimary">#000000</item> <!-- White text on Deep Orange -->
         <!-- Secondary brand color. -->
         <item name="colorSecondary">#4CAF50</item> <!-- Green -->
         <item name="colorSecondaryVariant">#388E3C</item> <!-- Darker shade of Green -->
