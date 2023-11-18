@@ -19,9 +19,12 @@
             android:theme="@style/Theme.PulsePlanner.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+            <!-- Add the windowContentTransitions meta-data here -->
+            <meta-data
+                android:name="android:windowContentTransitions"
+                android:value="true" />
         </activity>
     </application>
 

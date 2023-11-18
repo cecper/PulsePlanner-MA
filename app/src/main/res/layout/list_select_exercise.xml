@@ -3,8 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:padding="8dp"
-    android:background="#6496D3">
+    android:padding="8dp">
 
     <RelativeLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
@@ -21,7 +20,6 @@
             android:textSize="20sp"
             android:gravity="center_vertical"
             android:layout_alignParentStart="true"
-            android:background="@drawable/round_blue_background"
             android:padding="12dp" />
 
         <Button
@@ -30,7 +28,6 @@
             android:layout_height="48dp"
             android:text="Select"
             android:layout_alignParentEnd="true"
-            android:background="@drawable/round_red_background"
             android:padding="0dp"
             />
 
@@ -41,7 +38,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="19sp"
-        android:textColor="@color/black"
         android:padding="8dp" />
 
     <TextView
@@ -49,7 +45,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="17sp"
-        android:textColor="@color/black"
         android:padding="8dp" />
 
 

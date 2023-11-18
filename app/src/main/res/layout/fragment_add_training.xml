@@ -73,7 +73,6 @@
         android:layout_height="wrap_content"
         android:text="Tot: 0h 0m"
         android:layout_margin="15dp"
-        android:textColor="@color/black"
         android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/addExerciseButton"
@@ -111,11 +110,8 @@
         android:layout_height="48dp"
         android:layout_margin="8dp"
         android:hint="Search by Name &amp; Categories"
-        android:textColor="@color/white"
-        android:textColorHint="@color/white"
         app:layout_constraintTop_toBottomOf="@+id/goBackButton"
         android:padding="8dp"
-        android:background="@drawable/round_blue_background"
         />
 
     <ListView
