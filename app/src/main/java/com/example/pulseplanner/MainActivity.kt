@@ -1,7 +1,9 @@
 package com.example.pulseplanner
 
+import android.os.Build
 import android.os.Bundle
 import android.view.Menu
+import androidx.annotation.RequiresApi
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.navigation.NavigationView
 import androidx.navigation.findNavController
@@ -17,6 +19,7 @@ import com.example.pulseplanner.databinding.ActivityMainBinding
 import com.example.pulseplanner.model.Category
 import com.example.pulseplanner.model.CategoryRepository
 import com.example.pulseplanner.model.Exercise
+import com.example.pulseplanner.model.Training
 import java.io.File
 
 class MainActivity : AppCompatActivity() {
@@ -24,6 +27,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -31,36 +35,6 @@ class MainActivity : AppCompatActivity() {
         CategoryRepository.setContext(this)
         ExerciseRepository.setContext(this)
         TrainingRepository.setContext(this)
-
-//        // create 10 in a list
-//        if (ExerciseRepository.getInstance().getExercises().size == 0) {
-//            var exercises = mutableListOf<Exercise>()
-//
-//            val categories = listOf(
-//                Category("Beginner"),
-//                Category("Forehand"),
-//                Category("Backhand")
-//            )
-//
-//            val descriptions = listOf(
-//                "Description for Exercise 1",
-//                "Description for Exercise 2",
-//                "Description for Exercise 3",
-//                "Description for Exercise 4",
-//                "Description for Exercise 5",
-//                "Description for Exercise 6"
-//            )
-//            for (i in 0 until 6) {
-//                val exerciseDescription = descriptions[i] + "ah ".repeat(50 * (i + 1))
-//                exercises.add(Exercise("Exercise ${i + 1}", listOf(categories[i % 3], categories[i % 2]), exerciseDescription))
-//            }
-//
-//            // save the exercises one by one
-//            for (exercise in exercises) {
-//                ExerciseRepository.getInstance().createExercise(exercise)
-//            }
-//        }
-
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -75,7 +49,7 @@ class MainActivity : AppCompatActivity() {
 
         appBarConfiguration = AppBarConfiguration(
             setOf(
-                R.id.nav_home, R.id.nav_gallery, R.id.nav_slideshow, R.id.nav_exercise, R.id.nav_category, R.id.nav_exercise_overview, R.id.nav_add_training, R.id.nav_settings_menu
+                R.id.nav_home, R.id.nav_gallery, R.id.nav_slideshow, R.id.nav_exercise, R.id.nav_category, R.id.nav_exercise_overview, R.id.nav_add_training, R.id.nav_training_overview, R.id.nav_settings_menu,
             ), drawerLayout
         )
         setupActionBarWithNavController(navController, appBarConfiguration)

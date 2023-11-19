@@ -10,24 +10,30 @@
             android:title="@string/menu_home" />
 
         <item
-            android:id="@+id/nav_add_training"
-            android:icon="@drawable/ic_menu_exercise"
-            android:title="@string/menu_add_training" />
-
-        <item
-            android:id="@+id/nav_exercise"
-            android:icon="@drawable/ic_menu_exercise"
-            android:title="@string/menu_exercise" />
-
-        <item
-            android:id="@+id/nav_exercise_overview"
-            android:icon="@drawable/ic_menu_exercise"
-            android:title="@string/menu_exercise_overview" />
-
-        <item
             android:id="@+id/nav_category"
             android:icon="@drawable/ic_menu_category"
             android:title="@string/menu_category" />
+
+        <item
+            android:id="@+id/nav_exercise_overview"
+            android:icon="@drawable/ic_menu_exercise_overview"
+            android:title="@string/menu_exercise_overview" />
+
+        <item
+            android:id="@+id/nav_exercise"
+            android:icon="@drawable/ic_menu_add_exercise"
+            android:title="@string/menu_exercise" />
+
+        <item
+            android:id="@+id/nav_training_overview"
+            android:icon="@drawable/ic_menu_training_overview"
+            android:title="@string/menu_training_overview" />
+
+        <item
+            android:id="@+id/nav_add_training"
+            android:icon="@drawable/ic_menu_add_training"
+            android:title="@string/menu_add_training" />
+
 
         <item
             android:id="@+id/nav_settings_menu"
