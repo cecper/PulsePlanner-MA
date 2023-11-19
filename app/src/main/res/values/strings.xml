@@ -15,5 +15,6 @@
     <string name="menu_exercise_overview">Exercise Overview</string>
     <string name="menu_add_training">Create Training</string>
     <string name="menu_training_overview">Training Overview</string>
+    <string name="menu_settings">Settings</string>
 
 </resources>

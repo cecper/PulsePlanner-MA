@@ -8,12 +8,10 @@
         android:id="@+id/categoryNameTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="22sp"
-        android:textColor="@android:color/white"
+        android:textSize="20sp"
         android:layout_centerVertical="true"
         android:paddingStart="8dp"
         android:paddingEnd="8dp"
-        android:background="@drawable/round_blue_background"
         />
 
     <Button
@@ -22,9 +20,6 @@
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:text="Delete"
-        android:textSize="13sp"
-        android:backgroundTint="#B53E3E"
-        android:textColor="@android:color/white"
         android:gravity="center"
         android:layout_alignParentEnd="true"
         />
