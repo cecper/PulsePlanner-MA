@@ -15,8 +15,10 @@ import com.google.gson.reflect.TypeToken
 import java.io.FileInputStream
 import java.io.FileNotFoundException
 import java.lang.reflect.Type
+import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
+import java.util.Date
 
 class TrainingRepository private constructor() {
     private var context: Context? = null
@@ -70,6 +72,36 @@ class TrainingRepository private constructor() {
             }
         } catch (e: FileNotFoundException) {
             //context?.showToast("File not found while loading trainings: ${e.message}")
+            println("File not found while loading trainings: ${e.message}")
+        } finally {
+            fis?.close()
+        }
+
+        return emptyList()
+    }
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun getTrainingsOfDate(date: LocalDate): List<Training> {
+        var fis: FileInputStream? = null
+
+        try {
+            fis = context?.openFileInput("trainings.json")
+            val readBytes = fis?.readBytes()
+            if (readBytes != null) {
+                val json = readBytes.toString(Charsets.UTF_8)
+                println("Loaded trainings from JSON file: $json")
+
+                val typeToken = object : TypeToken<List<Training>>() {}.type
+                val trainings = gson.fromJson<List<Training>>(json, typeToken)
+
+                val filteredTrainings = trainings.filter { training ->
+                    val trainingDateTime = training.dateTime
+                    val trainingDate = trainingDateTime.toLocalDate()
+                    trainingDate == date
+                }
+
+                return filteredTrainings.sortedBy { it.dateTime.toLocalTime() }
+            }
+        } catch (e: FileNotFoundException) {
             println("File not found while loading trainings: ${e.message}")
         } finally {
             fis?.close()

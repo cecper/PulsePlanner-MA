@@ -4,8 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:padding="16dp"
-    android:background="#F4F4F4">
+    android:padding="16dp">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -22,17 +21,15 @@
             android:textSize="22sp"
             android:textColor="#2196F3"
             android:gravity="center_vertical"
-            android:background="#BBDEFB"
-            android:padding="8dp" />
+            android:padding="8dp"
+            />
 
         <Button
             android:id="@+id/viewButton"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:text="View"
-            android:background="#4CAF50"
-            android:padding="8dp"
-            android:textColor="#FFFFFF" />
+            android:padding="8dp" />
     </LinearLayout>
 
     <LinearLayout
@@ -46,7 +43,6 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:textSize="20sp"
-            android:textColor="#009688"
             android:gravity="start|center_vertical"
             android:padding="8dp"
             android:text="Training DateTime" />
@@ -56,9 +52,7 @@
             android:layout_width="wrap_content"
             android:layout_height="48dp"
             android:text="Delete"
-            android:background="#F44336"
-            android:padding="8dp"
-            android:textColor="#FFFFFF" />
+            android:padding="8dp" />
 
     </LinearLayout>
 
@@ -67,7 +61,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="18sp"
-        android:textColor="#212121"
         android:padding="8dp"
         android:text="Training Categories: XYZ" />
 
@@ -76,7 +69,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="18sp"
-        android:textColor="#212121"
         android:padding="8dp"
         android:text="Training Duration: 2 hours" />
 
