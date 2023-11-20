@@ -27,9 +27,9 @@ class ExerciseOverviewAdapter(
         val exerciseCategoriesTextView = listItemView?.findViewById<TextView>(R.id.exerciseCategoriesTextView)
 
         exerciseNameTextView?.text = exercise?.name
-        exerciseDescriptionTextView?.text = exercise?.description
+        exerciseDescriptionTextView?.text = "description: "+exercise?.description
         val categoryNames = exercise?.categories?.map { it.categoryName }?.joinToString(", ")
-        exerciseCategoriesTextView?.text = categoryNames
+        exerciseCategoriesTextView?.text = "Categories: "+categoryNames
 
         deleteButton?.setOnClickListener {
             onClickShowDeleteDialog(exercise!!)

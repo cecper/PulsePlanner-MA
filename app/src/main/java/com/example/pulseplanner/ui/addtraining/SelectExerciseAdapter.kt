@@ -37,9 +37,9 @@ class SelectExerciseAdapter (
         val selectButton = listItemView?.findViewById<TextView>(R.id.selectButton)
 
         exerciseNameTextView?.text = exercise?.name
-        exerciseDescriptionTextView?.text = exercise?.description
+        exerciseDescriptionTextView?.text = "description: "+exercise?.description
         val categoryNames = exercise?.categories?.map { it.categoryName }?.joinToString(", ")
-        exerciseCategoriesTextView?.text = categoryNames
+        exerciseCategoriesTextView?.text = "Categories: "+categoryNames
         selectButton?.setOnClickListener {
             Toast.makeText(context, "Exercise ${exercise?.name} selected", Toast.LENGTH_SHORT).show()
             onSelectExerciseListener?.invoke(exercise!!)
