@@ -49,8 +49,6 @@ class TrainingOverviewFragment : Fragment() {
         setAllTrainingMode(true)
 
 
-        println("TrainingOverviewFragment.onCreateView")
-
         trainingOverviewViewModel.refreshTrainingList()
 
         val adapter2 = TrainingExerciseListAdapter(

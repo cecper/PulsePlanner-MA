@@ -55,10 +55,6 @@ class TrainingOverviewAdapter (
         // display date in format dd/MM/yyyy HHh mmm
         trainingDateTimeTextView?.text = training?.dateTime?.format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"))
 
-        println("TrainingOverviewAdapter.getView")
-        println(training?.dateTime)
-        //trainingDateTimeTextView?.text = formatDate(training?.dateTime!!)
-
 
         deleteButton?.setOnClickListener {
             onDeletedTrainingListener?.invoke(training!!)
