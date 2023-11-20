@@ -53,17 +53,14 @@ class HomeFragment : Fragment() {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         val root: View = binding.root
         val trainingOverviewViewModel = ViewModelProvider(this).get(TrainingOverviewViewModel::class.java)
-        val textView: TextView = binding.textHome
 
-        homeViewModel.text.observe(viewLifecycleOwner) {
-            textView.text = it
-        }
         dateTV = root.findViewById(R.id.idTVDate)
         calendarView = root.findViewById(R.id.calendarView)
         trainingListview=root.findViewById<android.widget.ListView>(R.id.trainingOverviewListView)
+        val dateNow= LocalDate.now()
+        dateTV.setText(dateNow.format(DateTimeFormatter.ofPattern("dd-MM-yyyy")))
 
-        // on below line we are adding set on
-        // date change listener for calendar view.
+
         _trainingList.value = TrainingRepository.getInstance().getTrainingsOfDate(
             LocalDate.now()
         )
@@ -89,14 +86,10 @@ class HomeFragment : Fragment() {
                         requireContext(),
                         _trainingList.value!!.toMutableList()
                     )
-
-
                     trainingListview.adapter = adapter
 
                     dateTV.setText(Date)
                 })
-
-
 
         return root
     }
