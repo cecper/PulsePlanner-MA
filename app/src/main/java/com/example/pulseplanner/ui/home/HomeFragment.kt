@@ -86,6 +86,28 @@ class HomeFragment : Fragment() {
                         requireContext(),
                         _trainingList.value!!.toMutableList()
                     )
+
+                    adapter.setOnDeletedTrainingListener { training ->
+                        showDeleteConfirmationDialog(training)
+                    }
+
+                    adapter.setOnViewTrainingListener { training ->
+                        //adapter2.updateTrainingExerciseList(training.exercises) todo
+                        println("training name: " + training.name)
+                        trainingNameTextView.text = training.name
+                        // display duration as ..h ..min if duration is more than 60 minutes otherwise display only minutes
+                        val durationMinutes = training.getDurationMinutes()
+                        val durationHours = durationMinutes.div(60)
+                        val durationMinutesRemaining = durationMinutes.rem(60)
+                        durationTextTrainingOverview.text =
+                            "Tot: ${if (durationHours != 0) "${durationHours}h " else ""}${durationMinutesRemaining}min"
+                        // display dateTime in format dd/MM/yyyy HHh mmm
+                        dateTimeFieldTrainingOverview.text = training.dateTime.format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"))
+                        val categoryNames = training.getCategories().map { it.categoryName }.joinToString(", ")
+                        categoriesTrainingOverview.text = categoryNames
+                        setAllTrainingMode(false)
+                    }
+
                     trainingListview.adapter = adapter
 
                     dateTV.setText(Date)

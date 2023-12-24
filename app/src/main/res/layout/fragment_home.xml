@@ -10,7 +10,7 @@
         android:id="@+id/idTVDate"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="8dp"
+        android:layout_margin="5dp"
         android:gravity="center"
         android:padding="8dp"
         android:text="Current Date"
@@ -28,8 +28,7 @@
         android:id="@+id/calendarView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/idTVDate"
-        android:layout_marginTop="30dp" />
+        android:layout_below="@id/idTVDate"/>
 
     <ListView
         android:id="@+id/trainingOverviewListView"
