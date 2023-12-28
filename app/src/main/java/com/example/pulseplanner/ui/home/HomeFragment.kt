@@ -3,14 +3,20 @@ package com.example.pulseplanner.ui.home
 import android.app.AlertDialog
 import android.os.Build
 import android.os.Bundle
+import android.text.style.ForegroundColorSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.ViewTreeObserver
 import android.widget.Button
 import android.widget.CalendarView
+import android.widget.LinearLayout
 import android.widget.ListView
+import android.widget.TableRow
 import android.widget.TextView
 import androidx.annotation.RequiresApi
+import androidx.core.content.ContextCompat
+import androidx.core.view.get
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
@@ -21,6 +27,7 @@ import com.example.pulseplanner.model.Training
 import com.example.pulseplanner.ui.trainingoverview.TrainingExerciseListAdapter
 import com.example.pulseplanner.ui.trainingoverview.TrainingOverviewAdapter
 import com.example.pulseplanner.ui.trainingoverview.TrainingOverviewViewModel
+import com.google.android.material.datepicker.DayViewDecorator
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.Date
@@ -55,12 +62,13 @@ class HomeFragment : Fragment() {
         val root: View = binding.root
         val trainingOverviewViewModel = ViewModelProvider(this).get(TrainingOverviewViewModel::class.java)
 
-         dateTV = root.findViewById<TextView>(R.id.idTVDate)
-         calendarView = root.findViewById<CalendarView>(R.id.calendarView)
+        dateTV = root.findViewById<TextView>(R.id.idTVDate)
+        calendarView = root.findViewById<CalendarView>(R.id.calendarView)
         val trainingListview=root.findViewById<android.widget.ListView>(R.id.trainingOverviewListView)
         val dateNow= LocalDate.now()
         dateTV.setText(dateNow.format(DateTimeFormatter.ofPattern("dd-MM-yyyy")))
 
+        //calendarView = refreshCalendarView(calendarView)
 
         // single training
         val goBackButton = root.findViewById<Button>(com.example.pulseplanner.R.id.goBackButton)
@@ -70,6 +78,23 @@ class HomeFragment : Fragment() {
         val categoriesTrainingOverview = root.findViewById<TextView>(com.example.pulseplanner.R.id.categoriesTrainingOverview)
         val trainingExerciseList = root.findViewById<ListView>(com.example.pulseplanner.R.id.trainingExerciseList)
         setAllTrainingMode(true)
+
+        // set the background color of 15/11/2023 to red
+        val dayView = getDayView(calendarView, 15, 11, 2023)
+        dayView?.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.red))
+
+        //make for loop for all dates in calendarview
+        //set the background color of the date to red if there is a training on that date
+
+        for (training in TrainingRepository.getInstance().getTrainings()) {
+            val day = training.dateTime.dayOfMonth
+            val month = training.dateTime.monthValue - 1 // months are zero-indexed
+            val year = training.dateTime.year
+
+            val dayView = getDayView(calendarView, day, month, year)
+            dayView?.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.red))
+        }
+
 
         calendarView
             .setOnDateChangeListener(
@@ -163,6 +188,55 @@ class HomeFragment : Fragment() {
         }
 
         return root
+    }
+
+//    //return the calendarview with colors
+//    @RequiresApi(Build.VERSION_CODES.O)
+//    private fun refreshCalendarView(calendarView : CalendarView) : CalendarView {
+//        val trainingList = TrainingRepository.getInstance().getTrainings()
+//        val dateColorMap = mutableMapOf<LocalDate, Int>()
+//
+//        for (training in trainingList) {
+//            dateColorMap.put(training.dateTime.toLocalDate(), R.style.DateTextAppearanceColor1)
+//        }
+//
+//        // Set a background color for specific dates
+//        calendarView.viewTreeObserver.addOnPreDrawListener(object : ViewTreeObserver.OnPreDrawListener {
+//            @RequiresApi(Build.VERSION_CODES.O)
+//            override fun onPreDraw(): Boolean {
+//                calendarView.viewTreeObserver.removeOnPreDrawListener(this)
+//                for ((date, colorResId) in dateColorMap) {
+//                    val day = date.dayOfMonth
+//                    val month = date.monthValue - 1 // months are zero-indexed
+//                    val year = date.year
+//
+//                    val dayView = getDayView(calendarView, day, month, year)
+//                    dayView?.setBackgroundColor(ContextCompat.getColor(requireContext(), colorResId))
+//                }
+//                return true
+//            }
+//        })
+//
+//        return calendarView;
+//    }
+
+
+    // Helper function to get the day view for a specific date
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun getDayView(calendarView: CalendarView, day: Int, month: Int, year: Int): View? {
+        val firstDayOfMonth = LocalDate.of(year, month + 1, 1)
+        val dayOfWeek = firstDayOfMonth.dayOfWeek.value % 7 // Convert to 0-6 range (Sunday-Saturday)
+        val offset = (day + dayOfWeek - 2) % 7 // Calculate the offset for the specific day
+
+        // Calculate the position of the day view in the CalendarView
+        val childIndex = day + offset
+        val weekIndex = childIndex / 7
+
+        // Get the week view (TableRow) at the calculated position
+        val weekView = (calendarView.getChildAt(0) as? LinearLayout)?.getChildAt(weekIndex) as? TableRow
+
+        // Get the day view (TextView) at the calculated position
+        return weekView?.getChildAt(childIndex % 7)
     }
 
     @RequiresApi(Build.VERSION_CODES.O)

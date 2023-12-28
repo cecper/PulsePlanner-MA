@@ -8,46 +8,57 @@
 
     <EditText
         android:id="@+id/exerciseNameEditText"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:hint="Exercise Name"
+        android:background="@drawable/rounded_edittext"
         android:padding="12dp"
         android:layout_marginTop="10dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp" />
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <EditText
         android:id="@+id/exerciseDescriptionEditText"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
         android:hint="Exercise Description"
+        android:background="@drawable/rounded_edittext"
         android:padding="12dp"
         android:layout_marginTop="10dp"
-        android:layout_below="@+id/exerciseNameEditText"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp" />
+        app:layout_constraintTop_toBottomOf="@+id/exerciseNameEditText"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/addedCategories" />
 
     <!-- Search and Category Section -->
     <ListView
         android:id="@+id/addedCategories"
         android:layout_width="match_parent"
-        android:layout_below="@id/exerciseDescriptionEditText"
-        android:layout_marginLeft="10dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginBottom="10dp" />
+        android:layout_marginTop="2dp"
+        app:layout_constraintHeight_max="200dp"
+        app:layout_constraintTop_toBottomOf="@+id/exerciseDescriptionEditText"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/searchField" />
 
     <EditText
         android:id="@+id/searchField"
-        android:layout_width="300dp"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:hint="Search / Add Category"
-        android:layout_below="@id/addedCategories"
-        android:layout_marginTop="10dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:padding="8dp" />
+        android:layout_margin="10dp"
+        app:layout_constraintTop_toBottomOf="@+id/addedCategories"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/addCategoryButton"
+        android:background="@drawable/round_blue_background"
+        android:padding="8dp"
+        android:textColorHint="@color/white" />
 
     <!-- Category List -->
     <Button
@@ -55,29 +66,31 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Add"
-        android:layout_below="@id/addedCategories"
-        android:layout_marginTop="10dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_toRightOf="@id/searchField"/>
+        android:layout_margin="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/addedCategories"
+        android:background="@drawable/round_blue_background" />
 
     <ListView
         android:id="@+id/categoryListView"
         android:layout_width="420dp"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/addCategoryButton"
-        android:layout_marginTop="10dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_alignParentBottom="true" />
+        android:layout_height="0dp"
+        android:layout_margin="5dp"
+        app:layout_constraintTop_toBottomOf="@+id/addCategoryButton"
+        app:layout_constraintStart_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/submitExerciseButton" />
 
     <Button
         android:id="@+id/submitExerciseButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Create Exercise"
+        android:textColor="@color/white"
+        android:layout_marginTop="10dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:background="@drawable/rounded_button" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
